@@ -12,10 +12,13 @@ RUN \
       luarocks \
       git \
       gcc \
+      build-essential \
+      m4 \
     && luarocks install cyrussasl 1.1.0-1 \
     && luarocks install lua-cjson 2.1.0-1 \
     && luarocks install luajwtjitsi 1.3-7 \
-    && luarocks install net-url 0.9-1
+    && luarocks install net-url 0.9-1 \
+    && luarocks install http 0.3-0
 
 FROM ${JITSI_REPO}/base
 
