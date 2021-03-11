@@ -37,7 +37,7 @@ RUN \
       lua-ldap \
       lua-sec \
       lua-http \
-      lua-cyrussasl
+      lua-cyrussasl \
     && apt-cleanup \
     && rm -rf /etc/prosody
 
