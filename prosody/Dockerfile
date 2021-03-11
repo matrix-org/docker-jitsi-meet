@@ -7,14 +7,12 @@ RUN \
     && apt-dpkg-wrap apt-get install -y \
       lua5.2 \
       liblua5.2-dev \
-      libsasl2-dev \
       libssl-dev \
       luarocks \
       git \
       gcc \
       build-essential \
       m4 \
-    && luarocks install cyrussasl 1.1.0-1 \
     && luarocks install lua-cjson 2.1.0-1 \
     && luarocks install luajwtjitsi 2.0-0 \
     && luarocks install net-url 0.9-1
@@ -39,6 +37,7 @@ RUN \
       lua-ldap \
       lua-sec \
       lua-http \
+      lua-cyrussasl
     && apt-cleanup \
     && rm -rf /etc/prosody
 
