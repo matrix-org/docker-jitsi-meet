@@ -1,5 +1,4 @@
 {{ $DEPLOYMENTINFO_USERREGION := .Env.DEPLOYMENTINFO_USERREGION | default "" -}}
-{{ $BRIDGE_CHANNEL := .Env.BRIDGE_CHANNEL | default "websocket" -}}
 {{ $ENABLE_AUDIO_PROCESSING := .Env.ENABLE_AUDIO_PROCESSING | default "true" | toBool -}}
 {{ $ENABLE_CALENDAR := .Env.ENABLE_CALENDAR | default "false" | toBool -}}
 {{ $ENABLE_FILE_RECORDING_SERVICE := .Env.ENABLE_FILE_RECORDING_SERVICE | default "false" | toBool -}}
@@ -26,16 +25,19 @@
 {{ $RESOLUTION_WIDTH_MIN := .Env.RESOLUTION_WIDTH_MIN | default "320" -}}
 {{ $START_AUDIO_ONLY := .Env.START_AUDIO_ONLY | default "false" | toBool -}}
 {{ $START_AUDIO_MUTED := .Env.START_AUDIO_MUTED | default 10 -}}
+{{ $START_WITH_AUDIO_MUTED := .Env.START_WITH_AUDIO_MUTED | default "false" | toBool -}}
+{{ $START_SILENT := .Env.START_SILENT | default "false" | toBool -}}
 {{ $DISABLE_AUDIO_LEVELS := .Env.DISABLE_AUDIO_LEVELS | default "false" | toBool -}}
 {{ $ENABLE_NOISY_MIC_DETECTION := .Env.ENABLE_NOISY_MIC_DETECTION | default "true" | toBool -}}
 {{ $START_VIDEO_MUTED := .Env.START_VIDEO_MUTED | default 10 -}}
+{{ $START_WITH_VIDEO_MUTED := .Env.START_WITH_VIDEO_MUTED | default "false" | toBool -}}
 {{ $DESKTOP_SHARING_FRAMERATE_MIN := .Env.DESKTOP_SHARING_FRAMERATE_MIN | default 5 -}}
 {{ $DESKTOP_SHARING_FRAMERATE_MAX := .Env.DESKTOP_SHARING_FRAMERATE_MAX | default 5 -}}
 {{ $TESTING_OCTO_PROBABILITY := .Env.TESTING_OCTO_PROBABILITY | default "0" -}}
 {{ $TESTING_CAP_SCREENSHARE_BITRATE := .Env.TESTING_CAP_SCREENSHARE_BITRATE | default "1" -}}
 {{ $XMPP_DOMAIN := .Env.XMPP_DOMAIN -}}
 {{ $XMPP_RECORDER_DOMAIN := .Env.XMPP_RECORDER_DOMAIN -}}
-
+{{ $DISABLE_DEEP_LINKING  := .Env.DISABLE_DEEP_LINKING | default "false" | toBool -}}
 
 // Video configuration.
 //
@@ -48,6 +50,7 @@ config.constraints.video.height = { ideal: {{ $RESOLUTION }}, max: {{ $RESOLUTIO
 config.constraints.video.width = { ideal: {{ $RESOLUTION_WIDTH }}, max: {{ $RESOLUTION_WIDTH }}, min: {{ $RESOLUTION_WIDTH_MIN }}};
 config.disableSimulcast = {{ not $ENABLE_SIMULCAST }};
 config.startVideoMuted = {{ $START_VIDEO_MUTED }};
+config.startWithVideoMuted = {{ $START_WITH_VIDEO_MUTED }};
 
 {{ if .Env.START_BITRATE -}}
 config.startBitrate = '{{ .Env.START_BITRATE }}';
@@ -66,6 +69,8 @@ config.disableAP = {{ not $ENABLE_AUDIO_PROCESSING }};
 config.stereo = {{ $ENABLE_STEREO }};
 config.startAudioOnly = {{ $START_AUDIO_ONLY }};
 config.startAudioMuted = {{ $START_AUDIO_MUTED }};
+config.startWithAudioMuted = {{ $START_WITH_AUDIO_MUTED }};
+config.startSilent = {{ $START_SILENT }};
 config.disableAudioLevels = {{ $DISABLE_AUDIO_LEVELS }};
 config.enableNoisyMicDetection = {{ $ENABLE_NOISY_MIC_DETECTION }};
 
@@ -241,6 +246,11 @@ config.enableWelcomePage = {{ $ENABLE_WELCOME_PAGE }};
 // Close page.
 config.enableClosePage = {{ $ENABLE_CLOSE_PAGE }};
 
+// Default language.
+{{ if .Env.DEFAULT_LANGUAGE -}}
+config.defaultLanguage = '{{ .Env.DEFAULT_LANGUAGE }}';
+{{ end -}}
+
 // Require users to always specify a display name.
 config.requireDisplayName = {{ $ENABLE_REQUIRE_DISPLAY_NAME }};
 
@@ -258,8 +268,6 @@ config.enableLipSync = {{ $ENABLE_LIPSYNC }};
 
 config.enableRemb = {{ $ENABLE_REMB }};
 config.enableTcc = {{ $ENABLE_TCC }};
-
-config.openBridgeChannel = '{{ $BRIDGE_CHANNEL }}';
 
 // Enable IPv6 support.
 config.useIPv6 = {{ $ENABLE_IPV6 }};
@@ -287,8 +295,16 @@ if (!config.hasOwnProperty('deploymentInfo')) config.deploymentInfo = {};
 config.deploymentInfo.environment = '{{ .Env.DEPLOYMENTINFO_ENVIRONMENT }}';
 {{ end -}}
 
+{{ if .Env.DEPLOYMENTINFO_SHARD -}}
+config.deploymentInfo.shard = '{{ .Env.DEPLOYMENTINFO_SHARD }}';
+{{ end -}}
+
 {{ if .Env.DEPLOYMENTINFO_ENVIRONMENT_TYPE -}}
 config.deploymentInfo.envType = '{{ .Env.DEPLOYMENTINFO_ENVIRONMENT_TYPE }}';
+{{ end -}}
+
+{{ if .Env.DEPLOYMENTINFO_REGION -}}
+config.deploymentInfo.region = '{{ .Env.DEPLOYMENTINFO_REGION }}';
 {{ end -}}
 
 {{ if $DEPLOYMENTINFO_USERREGION -}}
@@ -304,3 +320,6 @@ if (!config.testing.hasOwnProperty('octo')) config.testing.octo = {};
 
 config.testing.capScreenshareBitrate = {{ $TESTING_CAP_SCREENSHARE_BITRATE }};
 config.testing.octo.probability = {{ $TESTING_OCTO_PROBABILITY }};
+
+// Deep Linking
+config.disableDeepLinking = {{ $DISABLE_DEEP_LINKING }};

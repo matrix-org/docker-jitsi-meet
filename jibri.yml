@@ -2,7 +2,7 @@ version: '3'
 
 services:
     jibri:
-        image: jitsi/jibri:latest
+        image: jitsi/jibri:stable-5963
         restart: ${RESTART_POLICY}
         volumes:
             - ${CONFIG}/jibri:/config:Z
@@ -13,6 +13,7 @@ services:
         devices:
             - /dev/snd:/dev/snd
         environment:
+            - PUBLIC_URL
             - XMPP_AUTH_DOMAIN
             - XMPP_INTERNAL_MUC_DOMAIN
             - XMPP_RECORDER_DOMAIN

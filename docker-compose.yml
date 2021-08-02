@@ -3,7 +3,7 @@ version: '3'
 services:
     # Frontend
     web:
-        image: jitsi/web:latest
+        image: jitsi/web:stable-5963
         restart: ${RESTART_POLICY}
         ports:
             - '${HTTP_PORT}:80'
@@ -12,11 +12,14 @@ services:
             - ${CONFIG}/web:/config:Z
             - ${CONFIG}/transcripts:/usr/share/jitsi-meet/transcripts:Z
         environment:
+            - ENABLE_COLIBRI_WEBSOCKET
+            - ENABLE_FLOC
             - ENABLE_LETSENCRYPT
             - ENABLE_HTTP_REDIRECT
             - ENABLE_HSTS
             - ENABLE_XMPP_WEBSOCKET
             - DISABLE_HTTPS
+            - DISABLE_DEEP_LINKING
             - LETSENCRYPT_DOMAIN
             - LETSENCRYPT_EMAIL
             - LETSENCRYPT_USE_STAGING
@@ -25,15 +28,17 @@ services:
             - AMPLITUDE_ID
             - ANALYTICS_SCRIPT_URLS
             - ANALYTICS_WHITELISTED_EVENTS
-            - BRIDGE_CHANNEL
             - CALLSTATS_CUSTOM_SCRIPT_URL
             - CALLSTATS_ID
             - CALLSTATS_SECRET
             - CHROME_EXTENSION_BANNER_JSON
             - CONFCODE_URL
             - CONFIG_EXTERNAL_CONNECT
+            - DEFAULT_LANGUAGE
             - DEPLOYMENTINFO_ENVIRONMENT
             - DEPLOYMENTINFO_ENVIRONMENT_TYPE
+            - DEPLOYMENTINFO_REGION
+            - DEPLOYMENTINFO_SHARD
             - DEPLOYMENTINFO_USERREGION
             - DIALIN_NUMBERS_URL
             - DIALOUT_AUTH_URL
@@ -83,12 +88,15 @@ services:
             - RESOLUTION_WIDTH_MIN
             - START_AUDIO_ONLY
             - START_AUDIO_MUTED
+            - START_WITH_AUDIO_MUTED
+            - START_SILENT
             - DISABLE_AUDIO_LEVELS
             - ENABLE_NOISY_MIC_DETECTION
             - START_BITRATE
             - DESKTOP_SHARING_FRAMERATE_MIN
             - DESKTOP_SHARING_FRAMERATE_MAX
             - START_VIDEO_MUTED
+            - START_WITH_VIDEO_MUTED
             - TESTING_CAP_SCREENSHARE_BITRATE
             - TESTING_OCTO_PROBABILITY
             - XMPP_AUTH_DOMAIN
@@ -100,12 +108,10 @@ services:
             - TOKEN_AUTH_URL
         networks:
             meet.jitsi:
-                aliases:
-                    - ${XMPP_DOMAIN}
 
     # XMPP server
     prosody:
-        image: jitsi/prosody:latest
+        image: jitsi/prosody:stable-5963
         restart: ${RESTART_POLICY}
         expose:
             - '5222'
@@ -174,7 +180,7 @@ services:
 
     # Focus component
     jicofo:
-        image: jitsi/jicofo:latest
+        image: jitsi/jicofo:stable-5963
         restart: ${RESTART_POLICY}
         volumes:
             - ${CONFIG}/jicofo:/config:Z
@@ -187,9 +193,9 @@ services:
             - ENABLE_CODEC_VP8
             - ENABLE_CODEC_VP9
             - ENABLE_CODEC_H264
+            - ENABLE_OCTO
             - ENABLE_RECORDING
             - ENABLE_SCTP
-            - JICOFO_COMPONENT_SECRET
             - JICOFO_AUTH_USER
             - JICOFO_AUTH_PASSWORD
             - JICOFO_ENABLE_BRIDGE_HEALTH_CHECKS
@@ -220,7 +226,7 @@ services:
 
     # Video bridge
     jvb:
-        image: jitsi/jvb:latest
+        image: jitsi/jvb:stable-5963
         restart: ${RESTART_POLICY}
         ports:
             - '${JVB_PORT}:${JVB_PORT}/udp'
@@ -228,6 +234,8 @@ services:
         volumes:
             - ${CONFIG}/jvb:/config:Z
         environment:
+            - ENABLE_COLIBRI_WEBSOCKET
+            - ENABLE_OCTO
             - DOCKER_HOST_ADDRESS
             - XMPP_AUTH_DOMAIN
             - XMPP_INTERNAL_MUC_DOMAIN
@@ -244,6 +252,10 @@ services:
             - JVB_WS_DOMAIN
             - JVB_WS_SERVER_ID
             - PUBLIC_URL
+            - JVB_OCTO_BIND_ADDRESS
+            - JVB_OCTO_PUBLIC_ADDRESS
+            - JVB_OCTO_BIND_PORT
+            - JVB_OCTO_REGION
             - TZ
         depends_on:
             - prosody
