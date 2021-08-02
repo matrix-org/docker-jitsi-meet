@@ -3,6 +3,11 @@ admins = {
     "{{ .Env.JVB_AUTH_USER }}@{{ .Env.XMPP_AUTH_DOMAIN }}"
 }
 
+unlimited_jids = {
+    "{{ .Env.JICOFO_AUTH_USER }}@{{ .Env.XMPP_AUTH_DOMAIN }}",
+    "{{ .Env.JVB_AUTH_USER }}@{{ .Env.XMPP_AUTH_DOMAIN }}"
+}
+
 plugin_paths = { "/prosody-plugins/", "/prosody-plugins-custom" }
 http_default_host = "{{ .Env.XMPP_DOMAIN }}"
 
@@ -130,6 +135,9 @@ VirtualHost "{{ .Env.XMPP_AUTH_DOMAIN }}"
         key = "/config/certs/{{ .Env.XMPP_AUTH_DOMAIN }}.key";
         certificate = "/config/certs/{{ .Env.XMPP_AUTH_DOMAIN }}.crt";
     }
+    modules_enabled = {
+        "limits_exception";
+    }
     authentication = "internal_hashed"
 
 {{ if .Env.XMPP_RECORDER_DOMAIN }}
@@ -148,6 +156,7 @@ Component "{{ .Env.XMPP_INTERNAL_MUC_DOMAIN }}" "muc"
         "{{ join "\";\n\"" (splitList "," .Env.XMPP_INTERNAL_MUC_MODULES) }}";
         {{ end }}
     }
+    restrict_room_creation = true
     muc_room_locking = false
     muc_room_default_public_jids = true
 
@@ -166,8 +175,8 @@ Component "{{ .Env.XMPP_MUC_DOMAIN }}" "muc"
     muc_room_locking = false
     muc_room_default_public_jids = true
 
-Component "focus.{{ .Env.XMPP_DOMAIN }}"
-    component_secret = "{{ .Env.JICOFO_COMPONENT_SECRET }}"
+Component "focus.{{ .Env.XMPP_DOMAIN }}" "client_proxy"
+    target_address = "{{ .Env.JICOFO_AUTH_USER }}@{{ .Env.XMPP_AUTH_DOMAIN }}"
 
 Component "speakerstats.{{ .Env.XMPP_DOMAIN }}" "speakerstats_component"
     muc_component = "{{ .Env.XMPP_MUC_DOMAIN }}"
