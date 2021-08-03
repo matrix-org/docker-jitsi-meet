@@ -18,6 +18,7 @@ RUN \
 FROM ${JITSI_REPO}/base:${BASE_TAG}
 
 ENV XMPP_CROSS_DOMAIN="false"
+ARG UVS_TAG=v1.7.0
 
 RUN \
     wget -q https://prosody.im/files/prosody-debian-packages.key -O - | gpg --enarmor > /etc/apt/trusted.gpg.d/prosody.asc \
@@ -47,6 +48,9 @@ RUN \
     && rm -rf /tmp/pkg /var/cache/apt
 
 RUN patch -d /usr/lib/prosody/modules/muc -p0 < /prosody-plugins/muc_owner_allow_kick.patch
+ADD https://raw.githubusercontent.com/matrix-org/prosody-mod-auth-matrix-user-verification/${UVS_TAG}/mod_auth_matrix_user_verification.lua \
+    https://raw.githubusercontent.com/matrix-org/prosody-mod-auth-matrix-user-verification/${UVS_TAG}/mod_matrix_power_sync.lua \
+    /prosody-plugins/
 
 COPY rootfs/ /
 

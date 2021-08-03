@@ -63,6 +63,13 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
     authentication = "cyrus"
     cyrus_application_name = "xmpp"
     allow_unencrypted_plain_auth = true
+    {{ else if eq $AUTH_TYPE "uvs" }}
+    authentication = "matrix_user_verification"
+    app_id="{{ .Env.PUBLIC_URL }}"
+    -- Base URL to the matrix user verification service (without ending slash)
+    uvs_base_url = "{{ .Env.UVS_URL }}"
+    uvs_auth_token = "{{ .Env.UVS_AUTH_TOKEN }}"
+    uvs_sync_power_levels = "{{ .Env.UVS_SYNC_POWER_LEVELS | default "false" }}"
   {{ else if eq $AUTH_TYPE "internal" }}
     authentication = "internal_hashed"
   {{ end }}
@@ -99,6 +106,9 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
         {{ end }}
         {{ if and $ENABLE_AUTH (eq $AUTH_TYPE "ldap") }}
         "auth_cyrus";
+        {{end}}
+        {{ if and (and $ENABLE_AUTH (eq $AUTH_TYPE "uvs")) (eq ($.Env.UVS_SYNC_POWER_LEVELS | default "false") "true") }}
+        "matrix_power_sync";
         {{end}}
     }
 
