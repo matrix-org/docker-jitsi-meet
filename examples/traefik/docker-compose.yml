@@ -37,7 +37,7 @@ services:
             - JIBRI_RECORDER_PASSWORD
             - ENABLE_RECORDING
         networks:
-            # traefik: change the following line to your external docker network 
+            # traefik: change the following line to your external docker network
             web:
             meet.jitsi:
                 aliases:
@@ -47,7 +47,7 @@ services:
             - "traefik.docker.network=web"
             - "traefik.enable=true"
             - "traefik.backend=jc_backend"
-            # traefik: change that to your actual fqdn 
+            # traefik: change that to your actual fqdn
             - "traefik.basic.frontend.rule=Host:your.host.name"
             - "traefik.basic.port=80"
 
@@ -128,6 +128,7 @@ services:
             - XMPP_DOMAIN
             - XMPP_AUTH_DOMAIN
             - XMPP_INTERNAL_MUC_DOMAIN
+            - XMPP_RECORDER_DOMAIN
             - XMPP_SERVER
             - JICOFO_COMPONENT_SECRET
             - JICOFO_AUTH_USER
@@ -175,6 +176,6 @@ services:
 # Custom network so all services can communicate using a FQDN
 networks:
     meet.jitsi:
-    # traefik: change the following line to your external docker network 
+    # traefik: change the following line to your external docker network
     web:
         external: true
