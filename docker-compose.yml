@@ -3,7 +3,7 @@ version: '3'
 services:
     # Frontend
     web:
-        image: jitsi/web:stable-5963
+        image: jitsi/web:stable-6173
         restart: ${RESTART_POLICY}
         ports:
             - '${HTTP_PORT}:80'
@@ -111,7 +111,7 @@ services:
 
     # XMPP server
     prosody:
-        image: jitsi/prosody:stable-5963
+        image: jitsi/prosody:stable-6173
         restart: ${RESTART_POLICY}
         expose:
             - '5222'
@@ -125,6 +125,7 @@ services:
             - ENABLE_AUTH
             - ENABLE_GUESTS
             - ENABLE_LOBBY
+            - ENABLE_AV_MODERATION
             - ENABLE_XMPP_WEBSOCKET
             - GLOBAL_MODULES
             - GLOBAL_CONFIG
@@ -172,6 +173,11 @@ services:
             - JWT_TOKEN_AUTH_MODULE
             - LOG_LEVEL
             - PUBLIC_URL
+            - TURN_CREDENTIALS
+            - TURN_HOST
+            - TURNS_HOST
+            - TURN_PORT
+            - TURNS_PORT
             - TZ
         networks:
             meet.jitsi:
@@ -180,7 +186,7 @@ services:
 
     # Focus component
     jicofo:
-        image: jitsi/jicofo:stable-5963
+        image: jitsi/jicofo:stable-6173
         restart: ${RESTART_POLICY}
         volumes:
             - ${CONFIG}/jicofo:/config:Z
@@ -226,7 +232,7 @@ services:
 
     # Video bridge
     jvb:
-        image: jitsi/jvb:stable-5963
+        image: jitsi/jvb:stable-6173
         restart: ${RESTART_POLICY}
         ports:
             - '${JVB_PORT}:${JVB_PORT}/udp'
