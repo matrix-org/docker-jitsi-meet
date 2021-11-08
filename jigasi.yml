@@ -3,7 +3,7 @@ version: '3'
 services:
     # SIP gateway (audio)
     jigasi:
-        image: jitsi/jigasi:stable-6173
+        image: jitsi/jigasi:latest
         restart: ${RESTART_POLICY}
         ports:
             - '${JIGASI_PORT_MIN}-${JIGASI_PORT_MAX}:${JIGASI_PORT_MIN}-${JIGASI_PORT_MAX}/udp'
@@ -43,6 +43,9 @@ services:
             - GC_CLIENT_EMAIL
             - GC_CLIENT_ID
             - GC_CLIENT_CERT_URL
+            - SENTRY_DSN="${JIGASI_SENTRY_DSN:-0}"
+            - SENTRY_ENVIRONMENT
+            - SENTRY_RELEASE
             - TZ
         depends_on:
             - prosody
