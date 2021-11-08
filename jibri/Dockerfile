@@ -4,8 +4,8 @@ FROM ${JITSI_REPO}/base-java:${BASE_TAG}
 
 #ARG CHROME_RELEASE=latest
 #ARG CHROMEDRIVER_MAJOR_RELEASE=latest
-ARG CHROME_RELEASE=94.0.4606.61
-ARG CHROMEDRIVER_MAJOR_RELEASE=94
+ARG CHROME_RELEASE=95.0.4638.69
+ARG CHROMEDRIVER_MAJOR_RELEASE=95
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -26,7 +26,7 @@ RUN apt-dpkg-wrap apt-get update && \
     [ "${CHROMEDRIVER_MAJOR_RELEASE}" = "latest" ] && \
     CHROMEDRIVER_RELEASE="$(curl -4Ls https://chromedriver.storage.googleapis.com/LATEST_RELEASE)" || \
     CHROMEDRIVER_RELEASE="$(curl -4Ls https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROMEDRIVER_MAJOR_RELEASE})" && \
-    curl -4Ls "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_RELEASE}/chromedriver_linux64.zip" \
+    curl -4Ls "https://chromedriver.storage.googleapis.com/${CHROME_RELEASE}/chromedriver_linux64.zip" \
     | zcat >> /usr/bin/chromedriver && \
     chmod +x /usr/bin/chromedriver && \
     chromedriver --version && \
