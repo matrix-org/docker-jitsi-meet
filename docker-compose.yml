@@ -43,6 +43,7 @@ services:
             - DYNAMIC_BRANDING_URL
             - ENABLE_AUDIO_PROCESSING
             - ENABLE_AUTH
+            - ENABLE_BREAKOUT_ROOMS
             - ENABLE_CALENDAR
             - ENABLE_COLIBRI_WEBSOCKET
             - ENABLE_FILE_RECORDING_SERVICE
@@ -140,6 +141,7 @@ services:
             - DISABLE_POLLS
             - ENABLE_AUTH
             - ENABLE_AV_MODERATION
+            - ENABLE_BREAKOUT_ROOMS
             - ENABLE_GUESTS
             - ENABLE_LOBBY
             - ENABLE_XMPP_WEBSOCKET
@@ -272,7 +274,6 @@ services:
             - JVB_TCP_PORT
             - JVB_TCP_MAPPED_PORT
             - JVB_STUN_SERVERS
-            - JVB_ENABLE_APIS
             - JVB_OCTO_BIND_ADDRESS
             - JVB_OCTO_PUBLIC_ADDRESS
             - JVB_OCTO_BIND_PORT
