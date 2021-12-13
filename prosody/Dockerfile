@@ -30,11 +30,9 @@ RUN wget -qO /etc/apt/trusted.gpg.d/prosody.gpg https://prosody.im/files/prosody
       lua-basexx \
       lua-ldap \
       lua-http \
+      lua-cyrussasl \
       lua-sec \
       patch && \
-    apt-dpkg-wrap apt-get install -t buster-backports -y \
-      lua-cyrussasl \
-      lua-sec && \
     apt-cleanup && \
     rm -rf /etc/prosody && \
     apt-dpkg-wrap apt-get update && \
