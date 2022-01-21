@@ -1,3 +1,33 @@
+## stable-6826
+
+Based on stable release 6826.
+
+* 238a636 jibri: correct chromedriver mismatch
+* 555a40e doc: update CHANGELOG
+* 825b4cb misc: working on latest
+
+## stable-6726-2
+
+**IMPORTANT:** This version updates Prosody to version 0.11.12 to fix CVE-2022-0217: https://prosody.im/security/advisory_20220113/
+
+Based on stable release 6726-2.
+
+* ae3e7e7 jvb: make MUC_NICKNAME configurable
+* 0be9c8f web: allow configuring buttons in toolbar and pre-join screen
+* d9d12f0 jvb: fix resolving XMPP server aliases
+* 81dc384 jigasi: allow jigasi guest participants
+* a8a596b jicofo: configure trusted-domains for Jibri if ENABLE_RECORDING is set
+* d250ad7 misc: working on latest
+
+## stable-6726-1
+
+Based on stable release 6726-1.
+
+* 9ac7b59 jibri: update Chrome to version 96
+* fb2326e prosody: add missing package libldap-common
+* 0600ece sample: add  ENABLE_BREAKOUT_ROOMS to env.example
+* 6cf0176 misc: working on latest
+
 ## stable-6726
 
 Based on stable release 6726.

@@ -3,7 +3,7 @@ version: '3'
 services:
     # Frontend
     web:
-        image: jitsi/web:latest
+        image: jitsi/web:stable-6826
         restart: ${RESTART_POLICY}
         ports:
             - '${HTTP_PORT}:80'
@@ -76,6 +76,7 @@ services:
             - ETHERPAD_URL_BASE
             - GOOGLE_ANALYTICS_ID
             - GOOGLE_API_APP_CLIENT_ID
+            - HIDE_PREMEETING_BUTTONS
             - INVITE_SERVICE_URL
             - JICOFO_AUTH_USER
             - LETSENCRYPT_DOMAIN
@@ -104,6 +105,7 @@ services:
             - TESTING_CAP_SCREENSHARE_BITRATE
             - TESTING_OCTO_PROBABILITY
             - TOKEN_AUTH_URL
+            - TOOLBAR_BUTTONS
             - TZ
             - VIDEOQUALITY_BITRATE_H264_LOW
             - VIDEOQUALITY_BITRATE_H264_STANDARD
@@ -127,7 +129,7 @@ services:
 
     # XMPP server
     prosody:
-        image: jitsi/prosody:latest
+        image: jitsi/prosody:stable-6826
         restart: ${RESTART_POLICY}
         expose:
             - '5222'
@@ -204,7 +206,7 @@ services:
 
     # Focus component
     jicofo:
-        image: jitsi/jicofo:latest
+        image: jitsi/jicofo:stable-6826
         restart: ${RESTART_POLICY}
         volumes:
             - ${CONFIG}/jicofo:/config:Z
@@ -255,7 +257,7 @@ services:
 
     # Video bridge
     jvb:
-        image: jitsi/jvb:latest
+        image: jitsi/jvb:stable-6826
         restart: ${RESTART_POLICY}
         ports:
             - '${JVB_PORT}:${JVB_PORT}/udp'
@@ -270,6 +272,7 @@ services:
             - JVB_AUTH_PASSWORD
             - JVB_BREWERY_MUC
             - JVB_PORT
+            - JVB_MUC_NICKNAME
             - JVB_TCP_HARVESTER_DISABLED
             - JVB_TCP_PORT
             - JVB_TCP_MAPPED_PORT

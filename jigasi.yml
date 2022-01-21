@@ -3,7 +3,7 @@ version: '3'
 services:
     # SIP gateway (audio)
     jigasi:
-        image: jitsi/jigasi:latest
+        image: jitsi/jigasi:stable-6826
         restart: ${RESTART_POLICY}
         ports:
             - '${JIGASI_PORT_MIN}-${JIGASI_PORT_MAX}:${JIGASI_PORT_MIN}-${JIGASI_PORT_MAX}/udp'
@@ -12,7 +12,9 @@ services:
             - ${CONFIG}/transcripts:/tmp/transcripts:Z
         environment:
             - ENABLE_AUTH
+            - ENABLE_GUESTS
             - XMPP_AUTH_DOMAIN
+            - XMPP_GUEST_DOMAIN
             - XMPP_MUC_DOMAIN
             - XMPP_INTERNAL_MUC_DOMAIN
             - XMPP_SERVER
