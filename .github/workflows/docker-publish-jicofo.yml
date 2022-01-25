@@ -5,7 +5,7 @@ on:
     branches: [ main ]
     tags: [ 'stable-*-ems*' ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, fosdem ]
 
 env:
   IMAGE_NAME: ${{ github.repository }}/jicofo
@@ -35,6 +35,17 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+    # https://github.com/actions/download-artifact/issues/3
+    - name: "Download Jicofo deb"
+      run: |
+        OTHER_REPO="matrix-org/jicofo"
+        WF_NAME="Build deb package"
+        ARTIFACT_NAME="debpkg"
+        RUN_ID=`gh run --repo ${OTHER_REPO} list --workflow "${WF_NAME}" --json databaseId --jq '.[0].databaseId'`
+        gh run --repo ${OTHER_REPO} download ${RUN_ID} -n ${ARTIFACT_NAME} -D jicofo
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
