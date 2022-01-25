@@ -170,7 +170,7 @@ jobs:
           "BASE_TAG=${{ github.base_ref }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
       if: contains(github.ref_name, '/merge')
-  
+
   build-push-jicofo:
     env:
       IMAGE_NAME: jicofo
@@ -200,6 +200,17 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: ${{ env.REGISTRY_BASE_PATH }}/${{ env.IMAGE_NAME }}
+
+    # https://github.com/actions/download-artifact/issues/3
+    - name: "Download Jicofo deb"
+      run: |
+        OTHER_REPO="matrix-org/jicofo"
+        WF_NAME="Build deb package"
+        ARTIFACT_NAME="debpkg"
+        RUN_ID=`gh run --repo ${OTHER_REPO} list --workflow "${WF_NAME}" --json databaseId --jq '.[0].databaseId'`
+        gh run --repo ${OTHER_REPO} download ${RUN_ID} -n ${ARTIFACT_NAME} -D jicofo
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
@@ -266,7 +277,7 @@ jobs:
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
       if: contains(github.ref_name, '/merge') == false
-          
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
@@ -282,7 +293,7 @@ jobs:
   build-push-jvb:
     env:
       IMAGE_NAME: jvb
-    
+
     runs-on: ubuntu-latest
 
     needs:
@@ -320,7 +331,7 @@ jobs:
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
       if: contains(github.ref_name, '/merge') == false
-          
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
@@ -374,7 +385,7 @@ jobs:
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
       if: contains(github.ref_name, '/merge') == false
-          
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
@@ -395,7 +406,7 @@ jobs:
 
     needs:
     - build-push-base
-    
+
     permissions:
       contents: read
       packages: write
@@ -428,7 +439,7 @@ jobs:
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
       if: contains(github.ref_name, '/merge') == false
-          
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:

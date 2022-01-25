@@ -8,8 +8,10 @@ LABEL org.opencontainers.image.url="https://github.com/jitsi/jicofo"
 LABEL org.opencontainers.image.source="https://github.com/jitsi/docker-jitsi-meet"
 LABEL org.opencontainers.image.documentation="https://jitsi.github.io/handbook/"
 
+ADD jicofo_1.0-*autostream*.deb /tmp/jicofo-fosdem.deb
 RUN apt-dpkg-wrap apt-get update && \
-    apt-dpkg-wrap apt-get install -y jicofo && \
+    apt-dpkg-wrap apt-get install -y jq ruby-hocon && \
+    apt-dpkg-wrap dpkg -i /tmp/jicofo-fosdem.deb && \
     apt-cleanup
 
 COPY rootfs/ /
