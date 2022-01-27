@@ -30,5 +30,5 @@ RUN apt-dpkg-wrap apt-get update && \
     apt-dpkg-wrap apt-get -y install supervisor && \
     mkdir -p /var/log/supervisor
 
+CMD [ "supervisord",  "-c", "/etc/supervisor.conf" ]
 ENTRYPOINT [ "/entrypoint" ]
-
