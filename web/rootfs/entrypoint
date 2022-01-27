@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv bash
+#!/bin/bash
 
 # make our folders
 mkdir -p \
@@ -25,6 +25,7 @@ if [[ $DISABLE_HTTPS -ne 1 ]]; then
             $STAGING \
             --issue \
             --standalone \
+            # TODO: replace s6 service logic with supervisord
             --pre-hook "if [[ -d /var/run/s6/services/nginx ]]; then s6-svc -d /var/run/s6/services/nginx; fi" \
             --post-hook "if [[ -d /var/run/s6/services/nginx ]]; then s6-svc -u /var/run/s6/services/nginx; fi" \
             -d $LETSENCRYPT_DOMAIN
@@ -86,3 +87,6 @@ cp /defaults/interface_config.js /config/interface_config.js
 if [[ -f /config/custom-interface_config.js ]]; then
     cat /config/custom-interface_config.js >> /config/interface_config.js
 fi
+
+# Launch supervisord with configuration
+supervisord -c /etc/supervisor.conf
