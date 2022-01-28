@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Ensure timezone is configured properly
+init_timezone
+
+# Initialize jitsi-jibri
+init_jitsi_jibri
+
+# Launch supervisord with configuration
+supervisord -c /etc/supervisor.conf
