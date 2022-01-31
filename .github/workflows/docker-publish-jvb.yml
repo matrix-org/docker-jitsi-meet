@@ -2,10 +2,10 @@ name: JVB Container Image
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
     tags: [ 'stable-*-ems*' ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
 
 env:
   IMAGE_NAME: ${{ github.repository }}/jvb
