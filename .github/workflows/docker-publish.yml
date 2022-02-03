@@ -49,7 +49,7 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr') == false
+      if: contains(github.ref_name, '/merge') == false
 
     - name: Build and push Docker image for PR
       uses: docker/build-push-action@v2
@@ -61,7 +61,7 @@ jobs:
         build-args: |
           "BASE_TAG=${{ github.base_ref }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr')
+      if: contains(github.ref_name, '/merge')
 
   build-push-base-java:
     env:
@@ -103,7 +103,7 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr') == false
+      if: contains(github.ref_name, '/merge') == false
 
     - name: Build and push Docker image for PR
       uses: docker/build-push-action@v2
@@ -115,7 +115,7 @@ jobs:
         build-args: |
           "BASE_TAG=${{ github.base_ref }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr')
+      if: contains(github.ref_name, '/merge')
 
   build-push-jibri:
     env:
@@ -157,7 +157,7 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr') == false
+      if: contains(github.ref_name, '/merge') == false
 
     - name: Build and push Docker image for PR
       uses: docker/build-push-action@v2
@@ -169,7 +169,7 @@ jobs:
         build-args: |
           "BASE_TAG=${{ github.base_ref }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr')
+      if: contains(github.ref_name, '/merge')
   
   build-push-jicofo:
     env:
@@ -211,7 +211,7 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr') == false
+      if: contains(github.ref_name, '/merge') == false
 
     - name: Build and push Docker image for PR
       uses: docker/build-push-action@v2
@@ -223,7 +223,7 @@ jobs:
         build-args: |
           "BASE_TAG=${{ github.base_ref }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr')
+      if: contains(github.ref_name, '/merge')
 
   build-push-jigasi:
     env:
@@ -265,7 +265,7 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr') == false
+      if: contains(github.ref_name, '/merge') == false
           
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
@@ -275,9 +275,9 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
-          "BASE_TAG=${{ env.BASE_TAG }}"
+          "BASE_TAG=${{ github.base_ref }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr')
+      if: contains(github.ref_name, '/merge')
 
   build-push-jvb:
     env:
@@ -319,7 +319,7 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr') == false
+      if: contains(github.ref_name, '/merge') == false
           
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
@@ -329,9 +329,9 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
-          "BASE_TAG=${{ env.BASE_TAG }}"
+          "BASE_TAG=${{ github.base_ref }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr')
+      if: contains(github.ref_name, '/merge')
 
   build-push-prosody:
     env:
@@ -373,7 +373,7 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr') == false
+      if: contains(github.ref_name, '/merge') == false
           
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
@@ -383,9 +383,9 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
-          "BASE_TAG=${{ env.BASE_TAG }}"
+          "BASE_TAG=${{ github.base_ref }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr')
+      if: contains(github.ref_name, '/merge')
 
   build-push-web:
     env:
@@ -427,7 +427,7 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr') == false
+      if: contains(github.ref_name, '/merge') == false
           
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
@@ -437,6 +437,6 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
-          "BASE_TAG=${{ env.BASE_TAG }}"
+          "BASE_TAG=${{ github.base_ref }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: startsWith(github.ref_name, 'pr')
+      if: contains(github.ref_name, '/merge')
