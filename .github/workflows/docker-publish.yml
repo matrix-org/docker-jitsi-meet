@@ -49,6 +49,19 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr') == false
+
+    - name: Build and push Docker image for PR
+      uses: docker/build-push-action@v2
+      with:
+        context: "base"
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          "BASE_TAG=${{ github.base_ref }}"
+          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr')
 
   build-push-base-java:
     env:
@@ -90,6 +103,19 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr') == false
+
+    - name: Build and push Docker image for PR
+      uses: docker/build-push-action@v2
+      with:
+        context: "base-java"
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          "BASE_TAG=${{ github.base_ref }}"
+          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr')
 
   build-push-jibri:
     env:
@@ -131,7 +157,20 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr') == false
 
+    - name: Build and push Docker image for PR
+      uses: docker/build-push-action@v2
+      with:
+        context: "jibri"
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          "BASE_TAG=${{ github.base_ref }}"
+          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr')
+  
   build-push-jicofo:
     env:
       IMAGE_NAME: jicofo
@@ -172,6 +211,19 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr') == false
+
+    - name: Build and push Docker image for PR
+      uses: docker/build-push-action@v2
+      with:
+        context: "jicofo"
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          "BASE_TAG=${{ github.base_ref }}"
+          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr')
 
   build-push-jigasi:
     env:
@@ -213,6 +265,19 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr') == false
+          
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: "jigasi"
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          "BASE_TAG=${{ env.BASE_TAG }}"
+          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr')
 
   build-push-jvb:
     env:
@@ -254,6 +319,19 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr') == false
+          
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: "jvb"
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          "BASE_TAG=${{ env.BASE_TAG }}"
+          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr')
 
   build-push-prosody:
     env:
@@ -295,6 +373,19 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr') == false
+          
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: "prosody"
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          "BASE_TAG=${{ env.BASE_TAG }}"
+          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr')
 
   build-push-web:
     env:
@@ -336,3 +427,16 @@ jobs:
         build-args: |
           "BASE_TAG=${{ env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr') == false
+          
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: "web"
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          "BASE_TAG=${{ env.BASE_TAG }}"
+          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      if: startsWith(github.ref_name, 'pr')
