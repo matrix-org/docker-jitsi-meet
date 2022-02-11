@@ -56,9 +56,7 @@ RUN mkdir -pm 750 /config/data && \
     mkdir -pm777 /var/run/saslauthd && \
     chgrp -R 0 /var/run/saslauthd && \
     chgrp -R 0 /config && \
-    chmod -R g=u /config && \
-    chgrp -R 0 /usr/share/prosody && \
-    chmod -R g=u /usr/share/prosody
+    chmod -R g=u /config
 
 EXPOSE 5222 5347 5280
 
