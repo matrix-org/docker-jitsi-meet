@@ -30,5 +30,15 @@ RUN apt-dpkg-wrap apt-get update && \
     apt-dpkg-wrap apt-get -y install supervisor && \
     mkdir -p /var/log/supervisor
 
+# fix permissions for timezone initialization
+RUN chgrp -R 0 /usr/share/zoneinfo && \
+    chgrp 0 /etc && \
+    chgrp 0 /etc/localtime && \
+    chgrp 0 /etc/timezone && \
+    chmod g=u /etc && \
+    chmod g=u /etc/localtime && \
+    chmod g=u /etc/timezone && \
+    chmod -R g=u /usr/share/zoneinfo
+
 CMD [ "supervisord",  "-c", "/etc/supervisor.conf" ]
 ENTRYPOINT [ "/entrypoint" ]
