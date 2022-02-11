@@ -1,11 +1,7 @@
 #!/bin/bash
 
 # make our folders
-mkdir -p \
-    /config/{nginx/site-confs,keys} \
-    /run \
-    /var/lib/nginx/tmp/client_body \
-    /var/tmp/nginx
+
 
 # generate keys (maybe)
 if [[ $DISABLE_HTTPS -ne 1 ]]; then
@@ -87,6 +83,3 @@ cp /defaults/interface_config.js /config/interface_config.js
 if [[ -f /config/custom-interface_config.js ]]; then
     cat /config/custom-interface_config.js >> /config/interface_config.js
 fi
-
-# Launch supervisord with configuration
-supervisord -c /etc/supervisor.conf
