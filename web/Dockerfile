@@ -23,7 +23,7 @@ RUN apt-dpkg-wrap apt-get update && \
 RUN chgrp -R 0 /config && \
     chmod -R g=u /config &&
     chgrp -R 0 /usr/share/jitsi-meet && \
-    chmod -R g=u /usr/share/jitsi-meet &&
+    chmod -R g=u /usr/share/jitsi-meet && \
     chgrp 0 /run && \
     chmod g=u 0 /run && \
     chgrp 0 /var/lib/nginx/tmp/client_body && \
