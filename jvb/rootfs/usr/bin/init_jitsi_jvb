@@ -27,5 +27,3 @@ fi
 
 tpl /defaults/logging.properties > /config/logging.properties
 tpl /defaults/jvb.conf > /config/jvb.conf
-
-chown -R jvb:jitsi /config

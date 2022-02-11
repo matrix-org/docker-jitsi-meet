@@ -8,4 +8,9 @@ RUN apt-dpkg-wrap apt-get update && \
 
 COPY rootfs/ /
 
+RUN chgrp -R 0 /config && \
+    chmod -R g=u /config &&
+    chgrp -R 0 /usr/share/jicofo && \
+    chmod -R g=u /usr/share/jicofo
+     
 VOLUME /config

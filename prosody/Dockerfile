@@ -52,6 +52,14 @@ COPY rootfs/ /
 COPY --from=builder /usr/local/lib/lua /usr/local/lib/lua
 COPY --from=builder /usr/local/share/lua /usr/local/share/lua
 
+RUN mkdir -pm 750 /config/data && \
+    mkdir -pm777 /var/run/saslauthd && \
+    chgrp -R 0 /var/run/saslauthd && \
+    chgrp -R 0 /config && \
+    chmod -R g=u /config &&
+    chgrp -R 0 /usr/share/prosody && \
+    chmod -R g=u /usr/share/prosody
+
 EXPOSE 5222 5347 5280
 
 VOLUME ["/config", "/prosody-plugins-custom"]

@@ -15,5 +15,3 @@ fi
 
 tpl /defaults/logging.properties > /config/logging.properties
 tpl /defaults/jicofo.conf > /config/jicofo.conf
-
-chown -R jicofo:jitsi /config

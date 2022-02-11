@@ -13,7 +13,23 @@ RUN apt-dpkg-wrap apt-get update && \
     mv /usr/share/jitsi-meet/interface_config.js /defaults && \
     rm -f /etc/nginx/conf.d/default.conf && \
     apt-cleanup && \
-    rm -rf /tmp/pkg /var/cache/apt
+    rm -rf /tmp/pkg /var/cache/apt && \
+    mkdir -p \
+    /config/{nginx/site-confs,keys} \
+    /run \
+    /var/lib/nginx/tmp/client_body \
+    /var/tmp/nginx
+
+RUN chgrp -R 0 /config && \
+    chmod -R g=u /config &&
+    chgrp -R 0 /usr/share/jitsi-meet && \
+    chmod -R g=u /usr/share/jitsi-meet &&
+    chgrp 0 /run && \
+    chmod g=u 0 /run && \
+    chgrp 0 /var/lib/nginx/tmp/client_body && \
+    chmod -R g=u /var/lib/nginx/tmp/client_body && \
+    chgrp 0 /var/tmp/nginx && \ 
+    chmod -R g=u /var/tmp/nginx
 
 EXPOSE 80 443
 
