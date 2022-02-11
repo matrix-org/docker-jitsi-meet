@@ -31,8 +31,7 @@ RUN apt-dpkg-wrap apt-get update && \
     mkdir -p /var/log/supervisor
 
 # fix permissions for timezone initialization
-RUN touch
-    chgrp -R 0 /usr/share/zoneinfo && \
+RUN chgrp -R 0 /usr/share/zoneinfo && \
     chgrp 0 /etc && \
     chgrp 0 /etc/localtime && \
     chgrp 0 /etc/timezone && \
