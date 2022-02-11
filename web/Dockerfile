@@ -26,7 +26,7 @@ RUN mkdir -pm775 /config && \
     chgrp -R 0 /usr/share/jitsi-meet && \
     chmod -R g=u /usr/share/jitsi-meet && \
     chgrp 0 /run && \
-    chmod g=u 0 /run && \
+    chmod g=u /run && \
     chgrp 0 /var/lib/nginx/tmp/client_body && \
     chmod -R g=u /var/lib/nginx/tmp/client_body && \
     chgrp 0 /var/tmp/nginx && \ 
