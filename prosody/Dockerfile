@@ -58,7 +58,7 @@ RUN chgrp 0 /var && \
     chmod g=u /var/run && \
     mkdir -pm777 /var/run/saslauthd && \
     chgrp -R 0 /var/run/saslauthd && \
-    chmod -R g=u /var/run/saslauthd
+    chmod -R g=u /var/run/saslauthd && \
     mkdir -pm 750 /config/data && \
     chgrp -R 0 /config && \
     chmod -R g=u /config
