@@ -21,6 +21,8 @@ RUN apt-dpkg-wrap apt-get update && \
     /var/tmp/nginx
 
 RUN mkdir -pm775 /config && \
+    mkdir -pm775 /config/nginx && \
+    mkdir -pm775 /config/nginx/site-confs && \
     chgrp -R 0 /config && \
     chmod -R g=u /config && \
     chgrp -R 0 /usr/share/jitsi-meet && \
