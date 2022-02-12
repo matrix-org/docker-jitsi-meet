@@ -12,6 +12,8 @@ RUN mkdir -pm775 /config && \
     chgrp -R 0 /config && \
     chmod -R g=u /config && \
     chgrp -R 0 /usr/share/jicofo && \
-    chmod -R g=u /usr/share/jicofo
+    chmod -R g=u /usr/share/jicofo && \
+    chgrp 0 /etc && \
+    chmod -R g=u /etc
      
 VOLUME /config
