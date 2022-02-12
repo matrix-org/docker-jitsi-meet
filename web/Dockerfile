@@ -30,8 +30,10 @@ RUN mkdir -pm775 /config && \
     chgrp 0 /var/lib/nginx/tmp/client_body && \
     chmod -R g=u /var/lib/nginx/tmp/client_body && \
     chgrp 0 /var/tmp/nginx && \ 
-    chmod -R g=u /var/tmp/nginx
-
+    chmod -R g=u /var/tmp/nginx && \
+    chgrp -R 0 /var/log/nginx && \
+    chmod -R g=u /var/log/nginx 
+    
 EXPOSE 80 443
 
 VOLUME ["/config", "/usr/share/jitsi-meet/transcripts"]
