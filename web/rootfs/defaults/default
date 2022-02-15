@@ -2,7 +2,7 @@ server {
 	listen {{ .Env.HTTP_PORT | default "80" | int }} default_server;
 	
 	{{ if .Env.ENABLE_IPV6 | default "1" | toBool }}
-	listen [::]:80 default_server;
+	listen [::]:{{ .Env.HTTP_PORT | default "80" | int }} default_server;
 	{{ end }}
 
 	{{ if .Env.ENABLE_HTTP_REDIRECT | default "0" | toBool }}
