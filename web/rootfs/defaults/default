@@ -1,5 +1,5 @@
 server {
-	listen {{ .Env.NGINX_HTTP_PORT | default "80" | int }} default_server;
+	listen {{ .Env.HTTP_PORT | default "80" | int }} default_server;
 	
 	{{ if .Env.ENABLE_IPV6 | default "1" | toBool }}
 	listen [::]:80 default_server;
@@ -14,10 +14,10 @@ server {
 
 {{ if not (.Env.DISABLE_HTTPS | default "0" | toBool) }}
 server {
-	listen {{ .Env.NGINX_HTTPS_PORT | default "80" | int }} ssl http2;
+	listen {{ .Env.HTTPS_PORT | default "80" | int }} ssl http2;
 	
 	{{ if .Env.ENABLE_IPV6 | default "1" | toBool }}
-	listen [::]:{{ .Env.NGINX_HTTPS_PORT | default "80" | int }} ssl http2;
+	listen [::]:{{ .Env.HTTPS_PORT | default "80" | int }} ssl http2;
 	{{ end }}
 
 	include /config/nginx/ssl.conf;
