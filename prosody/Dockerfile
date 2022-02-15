@@ -52,7 +52,9 @@ COPY rootfs/ /
 COPY --from=builder /usr/local/lib/lua /usr/local/lib/lua
 COPY --from=builder /usr/local/share/lua /usr/local/share/lua
 
-RUN chgrp 0 /var && \
+RUN mkdir /config && \
+    mkdir /config/data && \
+    chgrp 0 /var && \
     chgrp 0 /var/run && \
     chmod g=u /var && \
     chmod g=u /var/run && \
@@ -61,7 +63,14 @@ RUN chgrp 0 /var && \
     chmod -R g=u /var/run/saslauthd && \
     mkdir -pm 750 /config/data && \
     chgrp -R 0 /config && \
-    chmod -R g=u /config
+    chmod -R g=u /config && \
+    chgrp 0 /etc/localtime && \
+    chmod g=u /etc/localtime && \
+    chgrp 0 /etc/saslauthd.conf && \
+    chmod g=u /etc/saslauthd.conf && \
+    chgrp 0 /etc/ldap/ldap.conf && \
+    chmod g=u /etc/ldap/ldap.conf && \
+
 
 EXPOSE 5222 5347 5280
 
