@@ -15,7 +15,9 @@ RUN apt-dpkg-wrap apt-get update && \
     apt-cleanup && \
     rm -rf /tmp/pkg /var/cache/apt && \
     mkdir -p \
-    /config/{nginx/site-confs,keys} \
+    /config/nginx \
+    /config/nginx/site-confs \
+    /config/keys \
     /run \
     /var/lib/nginx/tmp/client_body \
     /var/tmp/nginx
