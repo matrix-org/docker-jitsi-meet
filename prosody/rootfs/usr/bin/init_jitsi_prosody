@@ -60,7 +60,7 @@ if [[ ! -z $JIGASI_XMPP_USER ]] && [[ ! -z $JIGASI_XMPP_PASSWORD ]]; then
     prosodyctl --config $PROSODY_CFG register $JIGASI_XMPP_USER $XMPP_AUTH_DOMAIN $JIGASI_XMPP_PASSWORD
 fi
 
-mkdir -p /config/certs
+mkdir -p /config/{certs,data}
 
 if [[ ! -f /config/certs/$XMPP_DOMAIN.crt ]]; then
     # echo for using all default values
