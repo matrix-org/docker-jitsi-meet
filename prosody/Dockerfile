@@ -66,10 +66,10 @@ RUN mkdir /config && \
     chmod -R g=u /config && \
     chgrp 0 /etc/localtime && \
     chmod g=u /etc/localtime && \
-    chgrp 0 /etc/saslauthd.conf && \
-    chmod g=u /etc/saslauthd.conf && \
-    chgrp 0 /etc/ldap/ldap.conf && \
-    chmod g=u /etc/ldap/ldap.conf
+    chgrp 0 /etc && \
+    chmod g=u /etc && \
+    chgrp -R 0 /etc/ldap && \
+    chmod --R g=u /etc/ldap
 
 
 EXPOSE 5222 5347 5280
