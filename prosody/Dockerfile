@@ -69,7 +69,7 @@ RUN mkdir /config && \
     chgrp 0 /etc/saslauthd.conf && \
     chmod g=u /etc/saslauthd.conf && \
     chgrp 0 /etc/ldap/ldap.conf && \
-    chmod g=u /etc/ldap/ldap.conf && \
+    chmod g=u /etc/ldap/ldap.conf
 
 
 EXPOSE 5222 5347 5280
