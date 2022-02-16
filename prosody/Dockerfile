@@ -52,16 +52,17 @@ COPY rootfs/ /
 COPY --from=builder /usr/local/lib/lua /usr/local/lib/lua
 COPY --from=builder /usr/local/share/lua /usr/local/share/lua
 
-RUN mkdir /config && \
-    mkdir /config/data && \
-    chgrp 0 /var && \
+RUN chgrp 0 /var && \
     chgrp 0 /var/run && \
     chmod g=u /var && \
     chmod g=u /var/run && \
     mkdir -pm777 /var/run/saslauthd && \
     chgrp -R 0 /var/run/saslauthd && \
     chmod -R g=u /var/run/saslauthd && \
-    mkdir -pm 750 /config/data && \
+    chgrp -R 0 /defaults && \
+    chmod -R g=u /defaults && \
+    mkdir /config && \
+    mkdir /config/data && \
     chgrp -R 0 /config && \
     chmod -R g=u /config && \
     chgrp 0 /etc/localtime && \
