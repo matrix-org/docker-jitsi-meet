@@ -69,7 +69,7 @@ RUN mkdir /config && \
     chgrp 0 /etc && \
     chmod g=u /etc && \
     chgrp -R 0 /etc/ldap && \
-    chmod --R g=u /etc/ldap
+    chmod -R g=u /etc/ldap
 
 
 EXPOSE 5222 5347 5280
