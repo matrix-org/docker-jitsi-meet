@@ -52,6 +52,7 @@ COPY rootfs/ /
 COPY --from=builder /usr/local/lib/lua /usr/local/lib/lua
 COPY --from=builder /usr/local/share/lua /usr/local/share/lua
 
+# These permissions changes / directory paths allow the container to run as non-root
 RUN chgrp 0 /var && \
     chgrp 0 /var/run && \
     chmod g=u /var && \
