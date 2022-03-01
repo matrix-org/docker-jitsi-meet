@@ -246,3 +246,7 @@ Component "breakout.{{ .Env.XMPP_DOMAIN }}" "muc"
     muc_room_locking = false
     muc_room_default_public_jids = true
 {{ end }}
+
+{{ if .Env.XMPP_RUN_AS_ROOT }}
+run_as_root = true
+{{ end }}
