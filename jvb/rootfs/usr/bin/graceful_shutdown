@@ -110,22 +110,26 @@ then
 
   supervisorctl stop jvb
 
+  supervisor_pid="$(supervisorctl pid)"
+
+  kill "$supervisor_pid"
+
   # check for 3 seconds if we managed to kill
   for I in 1 2 3
   do
-    if ps -p $pid > /dev/null 2>&1
+    if ps -p $supervisor_pid > /dev/null 2>&1
     then
       sleep 1
     fi
   done
-  if ps -p $pid > /dev/null 2>&1
+  if ps -p $supervisor_pid > /dev/null 2>&1
   then
-    printError "Failed to kill $pid"
-    printError "Sending force kill to $pid"
-    kill -9 $pid
-    if ps -p $pid > /dev/null 2>&1
+    printError "Failed to kill $supervisor_pid"
+    printError "Sending force kill to $supervisor_pid"
+    kill -9 $supervisor_pid
+    if ps -p $supervisor_pid > /dev/null 2>&1
     then
-      printError "Failed to force kill $pid, giving up."
+      printError "Failed to force kill supervisor at pid: $supervisor_pid, giving up."
       exit 1
     fi
   fi
