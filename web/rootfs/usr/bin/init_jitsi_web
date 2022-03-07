@@ -22,8 +22,8 @@ if [[ $DISABLE_HTTPS -ne 1 ]]; then
             --issue \
             --standalone \
             # TODO: replace s6 service logic with supervisord
-            --pre-hook "if [ supervisorctl pid nginx ]; then supervisorctl stop nginx; fi" \
-            --post-hook "if ! [ supervisorctl pid nginx ]; then supervisorctl start nginx; fi" \
+            --pre-hook "if supervisorctl pid nginx; then supervisorctl stop nginx; fi" \
+            --post-hook "if ! supervisorctl pid nginx; then supervisorctl start nginx; fi" \
             -d $LETSENCRYPT_DOMAIN
         rc=$?
         if [[ $rc -eq 1 ]]; then
