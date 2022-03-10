@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Ensure timezone is configured properly
+init_timezone
+
+# Initialize jitsi-web
+init_jitsi_prosody
+
+# Launch supervisord with configuration
+supervisord -c /etc/supervisor.conf

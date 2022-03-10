@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# we have to set it, otherwise chrome won't find ~/.asoundrc file
+HOME=/home/jibri
+
+DAEMON=/opt/jitsi/jibri/launch.sh
+# exec s6-setuidgid jibri 
+exec /bin/bash -c "exec $DAEMON"
+

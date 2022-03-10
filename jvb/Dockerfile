@@ -8,4 +8,12 @@ RUN apt-dpkg-wrap apt-get update && \
 
 COPY rootfs/ /
 
+RUN mkdir -pm775 /config && \
+    chgrp -R 0 /config && \
+    chmod -R g=u /config && \
+    chgrp -R 0 /usr/share/jitsi-videobridge && \
+    chmod -R g=u /usr/share/jitsi-videobridge && \
+    chgrp -R 0 /defaults && \ 
+    chmod -R g=u /defaults
+    
 VOLUME /config
