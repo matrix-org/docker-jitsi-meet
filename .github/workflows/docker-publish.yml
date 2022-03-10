@@ -2,10 +2,10 @@ name: Jitsi Meet Docker Images
 
 on:
   push:
-    branches: [ main, master, testing ]
+    branches: [ main, master, testing, openshift ]
     tags: [ 'stable-*-ems*' ]
   pull_request:
-    branches: [ main, master, testing ]
+    branches: [ main, master, testing, openshift ]
 
 env:
   REGISTRY: ghcr.io
