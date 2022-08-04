@@ -1,3 +1,151 @@
+## stable-7439-2
+
+Based on stable release 7439-2.
+
+* b2f704a misc: working on unstable
+* 62655d8 release: stable-7439-1
+* 22dc822 prosody: fix XMPP_MUC_CONFIGURATION
+* 11de38f fix: properly use default SIP config
+* 82a5382 fix: add missing $ to JIGASI_XMPP_USER
+* 76ff646 misc: working on unstable
+
+## stable-7439-1
+
+Based on stable release 7439-1.
+
+* 76ff646 misc: working on unstable
+
+## stable-7439
+
+Based on stable release 7439.
+
+* ea37859 prosody: add ability to configure MUC modules through ENV variables
+* 5ff69fd jvb: fix jvb.conf parsing error
+* 8f38fe6 web,jvb: add option to enable multi-stream
+* 701dadf jvb: add ability to disable STUN
+* 264a3d8 web: add prejoin config options
+* fec78e4 jigasi: build on arm
+* c04f658 web,jvb: allow underscore in JVB_WS_SERVER_ID
+* 55a4591 prosody: configure unbound resolver
+* 576e5a9 web: start with clean config.js
+* a7f260e web,etherpad: fix default public URL
+* 0cbfbfd web: don't proxy HTTP traffic to WS endpoints
+* 7ed5063 jibri,compose: avoid mounting /dev/shm/
+* fbb8a2d jibri: switch to PulseAudio
+* e7533f8 jibri: simplify Dockerfile
+* 7e74308 jigasi: switch to Java 11
+* a9d1ed6 misc: working on unstable
+* b227b73 build: fix multiarch build
+
+## stable-7287-2
+
+Based on stable release 7287-2.
+
+* ab08247 build: make sure JITSI_RELEASE is passed when invoking make
+* 5109874 prosody: update to latest stable
+* 343ef56 doc: update README
+* 829841e jibri: add support for arm64
+* 8d5a9cf jvb: fix not setting WS server ID
+* cffab8f jibri: fix log location template
+* 94833b5 doc: update README
+* d3901ba build: also release a "stable" tag
+* 9217b0a misc: working on unstable
+
+## stable-7287-1
+
+Based on stable release 7287-1.
+
+* 22e727c build: adapt release process to multiarch builds
+* be422c7 jibri: update Chrome to M102
+* 1463df4 compose: add ability to override image versions
+* 7c29b57 prosody: fix reservations API
+* 8337c0b jicofo,prosody: migrate to new reservations system
+* 70c5cbf misc: update dialin numbers url setup (#1298)
+* 7790012 misc: define ENABLE_JAAS_COMPONENTS variable (#1297)
+* 62ad172 misc: update env.example
+* 74ef7de web,prosody: add support for JaaS components
+* 902a673 misc: move security options in sample file
+* 2a23095 misc: use the "unstable" tag between releases
+* 741ec4a build: add native arch building support
+* 68d97c8 ci: add GH action docker build caching
+* 8b02b8a build,ci: add initial arm64 support
+* 3b86df0 compose: add ability to change the JVB colibri REST API exposed port
+* 458515c env: add link to handbook
+* 261577c web: stop using the default config file
+* ed6ef89 web: remove config option to control FLoC
+* cb5a753 config: simplify configuration
+* b505d58 misc: add stalebot
+* 5ff2735 web: add e2eping support using env variables
+* 6284167 web: add more audio quality options
+* 515bd19 misc: working on latest
+
+## stable-7287
+
+Based on stable release 7287.
+
+* 41d6a9a jibri: bump Chrome to version 101
+* 88bb1bc feature: support multiple XMPP servers via list (#1276)
+* 95af778 jicofo: add optional XMPP_PORT value (#1275)
+* da0a43a misc: working on latest
+
+## stable-7210-2
+
+Based on stable release 7210-2.
+
+* 2634e96 misc: working on latest
+
+## stable-7210-1
+
+Based on stable release 7210-1.
+
+* a8e6a34 prosody: completely disable external components
+* 8587d29 prosody: add mod_auth_cyrus from community libraries
+* 3a070e6 misc: working on latest
+
+## stable-7210
+
+Based on stable release 7210.
+
+* 1afa278 prosody: add temporary workaround for JWT auth
+* 6fe240a prosody: update to 0.12
+* 097558b ci: dry run Docker builds on PRs
+* eca5d16 web: fix matching etherpad location
+* 3afc1e3 prosody: update package version
+* b0617c0 web: fix Etherpad when using multi-domain
+* 0ce0f09 prosody: update version
+* 201a1b4 prosody: pin to version 0.11 for now
+* 29b4c23 prosody: use a more recent version of luarocks
+* c5b049a jvb: forward port 8080 to docker host
+* 6af7cd8 doc: update CHANGELOG
+* dd7b70b misc: working on latest
+
+## stable-7001
+
+**IMPORTANT:** Starting with this release TCP has support has been removed from the JVB.
+
+Based on stable release 7001.
+
+* 6e0dd04 base: replace frep with tpl
+* 1b51c77 feat: Enables polls for breakout rooms.
+* 0b019ee feat: Enables tenants/subdomains by default.
+* d50df67 fix: Fixes missing variable for prosody plugins.
+* 88997f5 prosody: authentication by matrix user authentication service
+* 7a93978 jvb: remove TCP support
+* c37706c misc: fix label order in  dockerfiles
+* 0de062b misc: add missing quotes to labels in dockerfiles
+* 76424fd chore: add opencontainers labels to Dockerfiles
+* 3b8ed7e misc: working on latest
+
+## stable-6865
+
+Based on stable release 6865.
+
+* 8004ffe Use the new log formatters, clean up stale logging config.
+* a862e84 web: cache versioned static files
+* 48d499a web: configure remote participant video menu
+* 78791ad env.example : ETHERPAD_PUBLIC_URL : incl. /p/ path
+* a504b59 misc: working on latest
+
 ## stable-6826
 
 Based on stable release 6826.

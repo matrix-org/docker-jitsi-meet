@@ -3,10 +3,10 @@ version: '3'
 services:
     # SIP gateway (audio)
     jigasi:
-        image: jitsi/jigasi:stable-6826
-        restart: ${RESTART_POLICY}
+        image: jitsi/jigasi:${JITSI_IMAGE_VERSION:-stable-7439-2}
+        restart: ${RESTART_POLICY:-unless-stopped}
         ports:
-            - '${JIGASI_PORT_MIN}-${JIGASI_PORT_MAX}:${JIGASI_PORT_MIN}-${JIGASI_PORT_MAX}/udp'
+            - '${JIGASI_PORT_MIN:-20000}-${JIGASI_PORT_MAX:-20050}:${JIGASI_PORT_MIN:-20000}-${JIGASI_PORT_MAX:-20050}/udp'
         volumes:
             - ${CONFIG}/jigasi:/config:Z
             - ${CONFIG}/transcripts:/tmp/transcripts:Z
@@ -18,6 +18,7 @@ services:
             - XMPP_MUC_DOMAIN
             - XMPP_INTERNAL_MUC_DOMAIN
             - XMPP_SERVER
+            - XMPP_PORT
             - XMPP_DOMAIN
             - PUBLIC_URL
             - JIGASI_SIP_URI

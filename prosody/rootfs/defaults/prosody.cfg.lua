@@ -1,4 +1,5 @@
 {{ $LOG_LEVEL := .Env.LOG_LEVEL | default "info" }}
+{{ $XMPP_PORT := .Env.XMPP_PORT | default "5222" -}}
 
 -- Prosody Example Configuration File
 --
@@ -78,6 +79,7 @@ modules_enabled = {
         {{ end }}
 };
 
+component_ports = { }
 https_ports = { }
 
 -- These modules are auto-loaded, but should you want
@@ -91,8 +93,6 @@ modules_disabled = {
 -- Disable account creation by default, for security
 -- For more information see http://prosody.im/doc/creating_accounts
 allow_registration = false;
-
-daemonize = false;
 
 -- Enable rate limits for incoming client and server connections
 limits = {
@@ -110,6 +110,9 @@ pidfile = "/config/data/prosody.pid";
 -- prevent clients from authenticating unless they are using encryption.
 
 c2s_require_encryption = false
+
+-- set c2s port
+c2s_ports = { {{ $XMPP_PORT }} } -- Listen on specific c2s port
 
 -- Force certificate authentication for server-to-server connections?
 -- This provides ideal security, but requires servers you communicate
@@ -172,8 +175,12 @@ network_backend = "epoll";
 network_settings = {
   tcp_backlog = 511;
 }
+unbound = {
+    resolvconf = true
+}
 
-component_interface = { "*" }
+http_ports = { 5280 }
+http_interfaces = { "*", "::" }
 
 data_path = "/config/data"
 
