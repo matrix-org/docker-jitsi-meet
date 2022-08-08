@@ -2,8 +2,7 @@
 {{ $ENABLE_AUDIO_PROCESSING := .Env.ENABLE_AUDIO_PROCESSING | default "true" | toBool -}}
 {{ $ENABLE_BREAKOUT_ROOMS := .Env.ENABLE_BREAKOUT_ROOMS | default "true" | toBool -}}
 {{ $ENABLE_CALENDAR := .Env.ENABLE_CALENDAR | default "false" | toBool -}}
-{{ $ENABLE_FILE_RECORDING_SERVICE := .Env.ENABLE_FILE_RECORDING_SERVICE | default "false" | toBool -}}
-{{ $ENABLE_FILE_RECORDING_SERVICE_SHARING := .Env.ENABLE_FILE_RECORDING_SERVICE_SHARING | default "false" | toBool -}}
+{{ $ENABLE_FILE_RECORDING_SHARING := .Env.ENABLE_FILE_RECORDING_SHARING | default "false" | toBool -}}
 {{ $ENABLE_IPV6 := .Env.ENABLE_IPV6 | default "true" | toBool -}}
 {{ $ENABLE_LIPSYNC := .Env.ENABLE_LIPSYNC | default "false" | toBool -}}
 {{ $ENABLE_NO_AUDIO_DETECTION := .Env.ENABLE_NO_AUDIO_DETECTION | default "true" | toBool -}}
@@ -52,6 +51,10 @@
 {{ $DISABLE_KICKOUT := .Env.DISABLE_KICKOUT | default "false" | toBool -}}
 {{ $DISABLE_GRANT_MODERATOR := .Env.DISABLE_GRANT_MODERATOR | default "false" | toBool -}}
 {{ $ENABLE_E2EPING := .Env.ENABLE_E2EPING | default "false" | toBool -}}
+{{ $DISABLE_LOCAL_RECORDING := .Env.DISABLE_LOCAL_RECORDING | default "false" | toBool -}}
+{{ $ENABLE_LOCAL_RECORDING_NOTIFY_ALL_PARTICIPANT := .Env.ENABLE_LOCAL_RECORDING_NOTIFY_ALL_PARTICIPANT | default "false" | toBool -}}
+{{ $ENABLE_LOCAL_RECORDING_SELF_START := .Env.ENABLE_LOCAL_RECORDING_SELF_START | default "false" | toBool -}}
+{{ $DISABLE_PROFILE := .Env.DISABLE_PROFILE | default "false" | toBool -}}
 
 
 // Video configuration.
@@ -134,8 +137,10 @@ config.etherpad_base = '{{ $PUBLIC_URL }}/etherpad/p/';
 
 config.hiddenDomain = '{{ $XMPP_RECORDER_DOMAIN }}';
 
+if (!config.hasOwnProperty('recordingService')) config.recordingService = {};
+
 // Whether to enable file recording or not
-config.fileRecordingsEnabled = true;
+config.recordingService.enabled = true;
 
 // Whether to enable live streaming or not.
 config.liveStreamingEnabled = true;
@@ -152,20 +157,18 @@ config.dropbox.redirectURI = '{{ .Env.DROPBOX_REDIRECT_URI }}';
 {{ end -}}
 {{ end -}}
 
-{{ if $ENABLE_FILE_RECORDING_SERVICE -}}
-// When integrations like dropbox are enabled only that will be shown,
-// by enabling fileRecordingsServiceEnabled, we show both the integrations
-// and the generic recording service (its configuration and storage type
-// depends on jibri configuration)
-config.fileRecordingsServiceEnabled = true;
-{{ end -}}
-{{ if $ENABLE_FILE_RECORDING_SERVICE_SHARING -}}
 // Whether to show the possibility to share file recording with other people
 // (e.g. meeting participants), based on the actual implementation
 // on the backend.
-config.fileRecordingsServiceSharingEnabled = true;
+config.recordingService.sharingEnabled = {{ $ENABLE_FILE_RECORDING_SHARING }};
 {{ end -}}
-{{ end -}}
+
+
+// Local recording configuration.
+if (!config.hasOwnProperty('localRecording')) config.localRecording = {};
+config.localRecording.disable = {{ $DISABLE_LOCAL_RECORDING }};
+config.localRecording.notifyAllParticipants = {{ $ENABLE_LOCAL_RECORDING_NOTIFY_ALL_PARTICIPANT }};
+config.localRecording.disableSelfRecording = {{ $ENABLE_LOCAL_RECORDING_SELF_START }};
 
 
 // Analytics.
@@ -281,12 +284,12 @@ config.prejoinConfig.enabled = {{ $ENABLE_PREJOIN_PAGE }};
 
 // Hides the participant name editing field in the prejoin screen.
 config.prejoinConfig.hideDisplayName = {{ $HIDE_PREJOIN_DISPLAY_NAME }};
- 
+
 // List of buttons to hide from the extra join options dropdown on prejoin screen.
 {{ if .Env.HIDE_PREJOIN_EXTRA_BUTTONS -}}
 config.prejoinConfig.hideExtraJoinButtons = [ '{{ join "','" (splitList "," .Env.HIDE_PREJOIN_EXTRA_BUTTONS) }}' ];
 {{ end -}}
- 
+
 // Welcome page.
 config.enableWelcomePage = {{ $ENABLE_WELCOME_PAGE }};
 
@@ -307,6 +310,8 @@ config.requireDisplayName = {{ $ENABLE_REQUIRE_DISPLAY_NAME }};
 config.chromeExtensionBanner = {{ .Env.CHROME_EXTENSION_BANNER_JSON }};
 {{ end -}}
 
+// Disables profile and the edit of all fields from the profile settings (display name and email)
+config.disableProfile = {{ $DISABLE_PROFILE }};
 
 // Advanced.
 //
@@ -326,6 +331,8 @@ config.transcribingEnabled = {{ $ENABLE_TRANSCRIPTIONS }};
 {{ if .Env.DYNAMIC_BRANDING_URL -}}
 // External API url used to receive branding specific information.
 config.dynamicBrandingUrl = '{{ .Env.DYNAMIC_BRANDING_URL }}';
+{{ else if .Env.BRANDING_DATA_URL  -}}
+config.brandingDataUrl = '{{ .Env.BRANDING_DATA_URL }}';
 {{ end -}}
 
 {{ if .Env.TOKEN_AUTH_URL -}}
@@ -385,14 +392,17 @@ config.videoQuality.preferredCodec = '{{ .Env.VIDEOQUALITY_PREFERRED_CODEC }}';
 
 config.videoQuality.enforcePreferredCodec = {{ $VIDEOQUALITY_ENFORCE_PREFERRED_CODEC }};
 
-if (!config.videoQuality.hasOwnProperty('maxBitratesVideo')) config.videoQuality.maxBitratesVideo = {};
+if (!config.videoQuality.hasOwnProperty('maxBitratesVideo')) config.videoQuality.maxBitratesVideo = null;
 {{ if and .Env.VIDEOQUALITY_BITRATE_H264_LOW .Env.VIDEOQUALITY_BITRATE_H264_STANDARD .Env.VIDEOQUALITY_BITRATE_H264_HIGH -}}
+config.videoQuality.maxBitratesVideo = config.videoQuality.maxBitratesVideo || {}
 config.videoQuality.maxBitratesVideo.H264 = { low: {{ .Env.VIDEOQUALITY_BITRATE_H264_LOW }}, standard: {{ .Env.VIDEOQUALITY_BITRATE_H264_STANDARD }}, high: {{ .Env.VIDEOQUALITY_BITRATE_H264_HIGH }} };
 {{ end -}}
 {{ if and .Env.VIDEOQUALITY_BITRATE_VP8_LOW .Env.VIDEOQUALITY_BITRATE_VP8_STANDARD .Env.VIDEOQUALITY_BITRATE_VP8_HIGH -}}
+config.videoQuality.maxBitratesVideo = config.videoQuality.maxBitratesVideo || {}
 config.videoQuality.maxBitratesVideo.VP8 = { low: {{ .Env.VIDEOQUALITY_BITRATE_VP8_LOW }}, standard: {{ .Env.VIDEOQUALITY_BITRATE_VP8_STANDARD }}, high: {{ .Env.VIDEOQUALITY_BITRATE_VP8_HIGH }} };
 {{ end -}}
 {{ if and .Env.VIDEOQUALITY_BITRATE_VP9_LOW .Env.VIDEOQUALITY_BITRATE_VP9_STANDARD .Env.VIDEOQUALITY_BITRATE_VP9_HIGH -}}
+config.videoQuality.maxBitratesVideo = config.videoQuality.maxBitratesVideo || {}
 config.videoQuality.maxBitratesVideo.VP9 = { low: {{ .Env.VIDEOQUALITY_BITRATE_VP9_LOW }}, standard: {{ .Env.VIDEOQUALITY_BITRATE_VP9_STANDARD }}, high: {{ .Env.VIDEOQUALITY_BITRATE_VP9_HIGH }} };
 {{ end -}}
 
