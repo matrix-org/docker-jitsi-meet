@@ -53,6 +53,27 @@ COPY rootfs/ /
 COPY --from=builder /usr/local/lib/lua /usr/local/lib/lua
 COPY --from=builder /usr/local/share/lua /usr/local/share/lua
 
+# These permissions changes / directory paths allow the container to run as non-root
+RUN chgrp 0 /var && \
+    chgrp 0 /var/run && \
+    chmod g=u /var && \
+    chmod g=u /var/run && \
+    mkdir -pm777 /var/run/saslauthd && \
+    chgrp -R 0 /var/run/saslauthd && \
+    chmod -R g=u /var/run/saslauthd && \
+    chgrp -R 0 /defaults && \
+    chmod -R g=u /defaults && \
+    mkdir /config && \
+    chgrp -R 0 /config && \
+    chmod -R g=u /config && \
+    chgrp 0 /etc/localtime && \
+    chmod g=u /etc/localtime && \
+    chgrp 0 /etc && \
+    chmod g=u /etc && \
+    chgrp -R 0 /etc/ldap && \
+    chmod -R g=u /etc/ldap
+
+
 EXPOSE 5222 5347 5280
 
 VOLUME ["/config", "/prosody-plugins-custom"]

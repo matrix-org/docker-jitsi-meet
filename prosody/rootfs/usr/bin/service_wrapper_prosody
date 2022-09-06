@@ -1,0 +1,2 @@
+#!/bin/bash
+prosody --config /config/prosody.cfg.lua

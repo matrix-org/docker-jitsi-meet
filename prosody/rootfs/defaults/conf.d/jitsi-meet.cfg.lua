@@ -96,7 +96,7 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
     -- Base URL to the matrix user verification service (without ending slash)
     uvs_base_url = "{{ .Env.UVS_URL }}"
     uvs_auth_token = "{{ .Env.UVS_AUTH_TOKEN }}"
-    uvs_sync_power_levels = "{{ .Env.UVS_SYNC_POWER_LEVELS | default "false" }}"
+    uvs_sync_power_levels = {{ .Env.UVS_SYNC_POWER_LEVELS | default "false" }}
   {{ else if eq $AUTH_TYPE "internal" }}
     authentication = "internal_hashed"
   {{ end }}
@@ -134,9 +134,6 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
         {{ end }}
         {{ if and $ENABLE_AUTH (eq $AUTH_TYPE "ldap") }}
         "auth_cyrus";
-        {{end}}
-        {{ if and (and $ENABLE_AUTH (eq $AUTH_TYPE "uvs")) (eq ($.Env.UVS_SYNC_POWER_LEVELS | default "false") "true") }}
-        "matrix_power_sync";
         {{end}}
     }
 
@@ -212,6 +209,9 @@ Component "{{ .Env.XMPP_MUC_DOMAIN }}" "muc"
         {{ if not $DISABLE_POLLS -}}
         "polls";
         {{ end -}}
+        {{ if and (and $ENABLE_AUTH (eq $AUTH_TYPE "uvs")) (eq ($.Env.UVS_SYNC_POWER_LEVELS | default "false") "true") }}
+        "matrix_power_sync";
+        {{end}}
     }
     muc_room_cache_size = 1000
     muc_room_locking = false

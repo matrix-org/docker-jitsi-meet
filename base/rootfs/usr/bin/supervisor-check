@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# this command returns 0 if all services are running, other codes if not
+supervisorctl status
