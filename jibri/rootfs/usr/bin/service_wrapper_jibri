@@ -5,5 +5,4 @@ HOME=/home/jibri
 
 DAEMON=/opt/jitsi/jibri/launch.sh
 # exec s6-setuidgid jibri 
-exec /bin/bash -c "exec $DAEMON"
-
+exec /bin/bash -c "/usr/bin/first-start-chrome.sh && exec $DAEMON"
