@@ -1,3 +1,40 @@
+## stable-8218
+
+Based on stable release 8218.
+
+* 8d7728b jibri: update Chrome to M108
+* 9cfbaf2 misc: drop JICOFO_AUTH_USER
+* 68751c2 prosody: add metadata component
+* 07f7054 jaas: pass the jitsi installation type at provisioning (#1456)
+* e219bcf web: add ability to configure whiteboard
+* ac12313 misc: working on unstable
+
+## stable-8138-1
+
+Based on stable release 8138-1.
+
+* 8923b72 web: fix missing quotes on config.js string
+* 6b11a89 misc: working on unstable
+
+## stable-8138
+
+Based on stable release 8138.
+
+* 1e49d65 web: simplify build
+* dd399fe web,jvb: remove ENABLE_MULTISTREAM
+* 723d661 jibri: add single-use-mode config option
+* ca14c52 web: add more transcription config env vars
+* ccc5746 prosody: add ability to configure TURN server transports
+* 17d047a misc: working on unstable
+
+## stable-8044-1
+
+Based on stable release 8044-1.
+
+* fd70f04 env: add note about JaaS account creation
+* 046bb79 jaas: register JaaS account automatically
+* c44c59e misc: working on unstable
+
 ## stable-8044
 
 Based on stable release 8044.
