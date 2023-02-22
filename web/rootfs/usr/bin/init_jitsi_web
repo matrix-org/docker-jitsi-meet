@@ -2,7 +2,6 @@
 
 # make our folders
 
-
 # generate keys (maybe)
 if [[ $DISABLE_HTTPS -ne 1 ]]; then
     if [[ $ENABLE_LETSENCRYPT -eq 1 ]]; then
@@ -20,9 +19,10 @@ if [[ $DISABLE_HTTPS -ne 1 ]]; then
         /config/acme.sh/acme.sh \
             $STAGING \
             --issue \
-            --standalone \
-            # TODO: replace s6 service logic with supervisord
-            --pre-hook "if supervisorctl pid nginx; then supervisorctl stop nginx; fi" \
+            --standalone
+        # TODO: replace s6 service logic with supervisord
+        --pre-hook "if supervisorctl pid nginx; then
+             supervisorctl stop nginx; fi" \
             --post-hook "if ! supervisorctl pid nginx; then supervisorctl start nginx; fi" \
             -d $LETSENCRYPT_DOMAIN
         rc=$?
@@ -37,9 +37,9 @@ if [[ $DISABLE_HTTPS -ne 1 ]]; then
         if [[ $rc -eq 0 ]]; then
             mkdir -p /config/acme-certs/$LETSENCRYPT_DOMAIN
             if ! /config/acme.sh/acme.sh \
-                    --install-cert -d $LETSENCRYPT_DOMAIN \
-                    --key-file /config/acme-certs/$LETSENCRYPT_DOMAIN/key.pem  \
-                    --fullchain-file /config/acme-certs/$LETSENCRYPT_DOMAIN/fullchain.pem ; then
+                --install-cert -d $LETSENCRYPT_DOMAIN \
+                --key-file /config/acme-certs/$LETSENCRYPT_DOMAIN/key.pem \
+                --fullchain-file /config/acme-certs/$LETSENCRYPT_DOMAIN/fullchain.pem; then
                 echo "Failed to install certificate."
                 # this tries to get the user's attention and to spare the
                 # authority's rate limit:
@@ -86,24 +86,24 @@ fi
 echo "Using Nginx resolver: =$NGINX_RESOLVER="
 
 # copy config files
-tpl /defaults/nginx.conf > /config/nginx/nginx.conf
+tpl /defaults/nginx.conf >/config/nginx/nginx.conf
 
-tpl /defaults/meet.conf > /config/nginx/meet.conf
+tpl /defaults/meet.conf >/config/nginx/meet.conf
 if [[ -f /config/nginx/custom-meet.conf ]]; then
-    cat /config/nginx/custom-meet.conf >> /config/nginx/meet.conf
+    cat /config/nginx/custom-meet.conf >>/config/nginx/meet.conf
 fi
 
-tpl /defaults/ssl.conf > /config/nginx/ssl.conf
+tpl /defaults/ssl.conf >/config/nginx/ssl.conf
 
-tpl /defaults/default > /config/nginx/site-confs/default
+tpl /defaults/default >/config/nginx/site-confs/default
 
-tpl /defaults/system-config.js > /config/config.js
-tpl /defaults/settings-config.js >> /config/config.js
+tpl /defaults/system-config.js >/config/config.js
+tpl /defaults/settings-config.js >>/config/config.js
 if [[ -f /config/custom-config.js ]]; then
-    cat /config/custom-config.js >> /config/config.js
+    cat /config/custom-config.js >>/config/config.js
 fi
 
 cp /defaults/interface_config.js /config/interface_config.js
 if [[ -f /config/custom-interface_config.js ]]; then
-    cat /config/custom-interface_config.js >> /config/interface_config.js
+    cat /config/custom-interface_config.js >>/config/interface_config.js
 fi
