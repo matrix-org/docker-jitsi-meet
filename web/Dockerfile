@@ -12,21 +12,10 @@ ADD https://raw.githubusercontent.com/acmesh-official/acme.sh/2.8.8/acme.sh /opt
 COPY rootfs/ /
 
 RUN apt-dpkg-wrap apt-get update && \
-    apt-dpkg-wrap apt-get install -y cron nginx-extras jitsi-meet-web socat && \
-    apt-dpkg-wrap apt-get -d install -y jitsi-meet-web-config && \
-    dpkg -x /var/cache/apt/archives/jitsi-meet-web-config*.deb /tmp/pkg && \
-    mv /tmp/pkg/usr/share/jitsi-meet-web-config/config.js /defaults && \
+    apt-dpkg-wrap apt-get install -y cron nginx-extras jitsi-meet-web socat curl jq && \
     mv /usr/share/jitsi-meet/interface_config.js /defaults && \
     rm -f /etc/nginx/conf.d/default.conf && \
-    apt-cleanup && \
-    rm -rf /tmp/pkg /var/cache/apt && \
-    mkdir -p \
-    /config/nginx \
-    /config/nginx/site-confs \
-    /config/keys \
-    /run \
-    /var/lib/nginx/tmp/client_body \
-    /var/tmp/nginx
+    apt-cleanup
 
 RUN chgrp -R 0 /config && \
     chmod -R g=u /config && \
@@ -42,7 +31,7 @@ RUN chgrp -R 0 /config && \
     chmod -R g=u /var/log/nginx && \
     chgrp -R 0 /var/lib/nginx && \
     chmod -R g=u /var/lib/nginx
-    
+
 EXPOSE 80 443
 
 VOLUME ["/config", "/usr/share/jitsi-meet/transcripts"]
