@@ -20,6 +20,21 @@ RUN apt-dpkg-wrap apt-get update && \
 # doesn't exist at build time
 RUN mkdir -pv /config/nginx && mkdir -pv /var/lib/nginx/tmp/client_body
 
+RUN chgrp -R 0 /config && \
+    chmod -R g=u /config && \
+    chgrp -R 0 /usr/share/jitsi-meet && \
+    chmod -R g=u /usr/share/jitsi-meet && \
+    chgrp 0 /run && \
+    chmod g=u /run && \
+    chgrp 0 /var/lib/nginx/tmp/client_body && \
+    chmod -R g=u /var/lib/nginx/tmp/client_body && \
+    chgrp 0 /var/tmp/nginx && \ 
+    chmod -R g=u /var/tmp/nginx && \
+    chgrp -R 0 /var/log/nginx && \
+    chmod -R g=u /var/log/nginx && \
+    chgrp -R 0 /var/lib/nginx && \
+    chmod -R g=u /var/lib/nginx
+
 EXPOSE 80 443
 ENTRYPOINT ["/entrypoint"]
 
