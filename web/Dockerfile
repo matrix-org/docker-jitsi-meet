@@ -12,11 +12,15 @@ ADD https://raw.githubusercontent.com/acmesh-official/acme.sh/2.8.8/acme.sh /opt
 COPY rootfs/ /
 
 RUN apt-dpkg-wrap apt-get update && \
-    apt-dpkg-wrap apt-get install -y cron nginx-extras jitsi-meet-web socat curl jq && \
+    apt-dpkg-wrap apt-get install -y cron nginx-extras jitsi-meet-web socat curl jq bash && \
     mv /usr/share/jitsi-meet/interface_config.js /defaults && \
     rm -f /etc/nginx/conf.d/default.conf && \
     apt-cleanup
 
+# doesn't exist at build time
+RUN mkdir -pv /config/nginx && mkdir -pv /var/lib/nginx/tmp/client_body
+
 EXPOSE 80 443
+ENTRYPOINT ["/entrypoint"]
 
 VOLUME ["/config", "/usr/share/jitsi-meet/transcripts"]
