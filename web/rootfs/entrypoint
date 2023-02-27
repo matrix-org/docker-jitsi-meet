@@ -7,4 +7,7 @@ init_timezone
 init_jitsi_web
 
 # Launch supervisord with configuration
-supervisord -c /etc/supervisor.conf
+supervisord -c /etc/supervisor.conf &
+init_jaas_account
+
+fg
