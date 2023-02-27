@@ -28,8 +28,6 @@ RUN chgrp -R 0 /config && \
     chmod g=u /run && \
     chgrp 0 /var/lib/nginx/tmp/client_body && \
     chmod -R g=u /var/lib/nginx/tmp/client_body && \
-    chgrp 0 /var/tmp/nginx && \ 
-    chmod -R g=u /var/tmp/nginx && \
     chgrp -R 0 /var/log/nginx && \
     chmod -R g=u /var/log/nginx && \
     chgrp -R 0 /var/lib/nginx && \
