@@ -352,6 +352,7 @@ services:
             - JVB_OCTO_RELAY_ID
             - JVB_WS_DOMAIN
             - JVB_WS_SERVER_ID
+            - JVB_ENABLE_WS_COMPRESSION
             - JVB_XMPP_AUTH_DOMAIN
             - JVB_XMPP_INTERNAL_MUC_DOMAIN
             - JVB_XMPP_PORT
