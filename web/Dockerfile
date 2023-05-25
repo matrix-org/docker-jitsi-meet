@@ -18,7 +18,9 @@ RUN apt-dpkg-wrap apt-get update && \
     apt-cleanup
 
 # doesn't exist at build time
-RUN mkdir -pv /config/nginx/site-confs && mkdir -pv /var/lib/nginx/tmp/client_body
+RUN mkdir -pv /config/nginx/site-confs && \
+    mkdir -pv /config/keys && \
+    mkdir -pv /var/lib/nginx/tmp/client_body
 
 RUN chgrp -R 0 /config && \
     chmod -R g=u /config && \
