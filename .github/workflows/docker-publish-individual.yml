@@ -42,21 +42,18 @@ jobs:
         # Turn off auto-latest, as we want to exclude openshift tags from that
         flavor: |
           latest=false
-        # 1-3. Generate the default docker tags, 4. generate latest if git tag is off the master branch, 5. generate openshift-latest if git tag is on the openshift branch
-        tags: |
-          type=ref,event=branch
-          type=ref,event=tag
-          type=ref,event=pr
-          type=ref,event=tag,value=latest,enable=${{ startsWith(github.ref_name, 'stable-') }}
-          type=ref,event=tag,value=openshift-latest,enable=${{ startsWith(github.ref_name, 'openshift-') }}
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v4
       with:
         context: "${{ inputs.folder }}"
         push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
+        tags: ${{ format('{0}{1}{2}', steps.meta.outputs.tags, env.MAINLINE_TAG, env.OPENSHIFT_TAG) }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
           "BASE_TAG=${{ contains(github.ref_name, '/merge') && github.base_ref || env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      env:
+        # Construct additional Docker tags if this is specific Git tags
+        MAINLINE_TAG: ${{ startsWith(github.ref, 'refs/tags/stable-') && format(',{0}/{1}:{2}', env.REGISTRY_BASE_PATH, inputs.folder, 'latest') || '' }}
+        OPENSHIFT_TAG: ${{ startsWith(github.ref, 'refs/tags/openshift-') && format(',{0}/{1}:{2}', env.REGISTRY_BASE_PATH, inputs.folder, 'openshift-latest') || '' }}
