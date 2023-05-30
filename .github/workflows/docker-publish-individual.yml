@@ -58,18 +58,5 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
-          "BASE_TAG=${{ env.BASE_TAG }}"
+          "BASE_TAG=${{ contains(github.ref_name, '/merge') && github.base_ref || env.BASE_TAG }}"
           "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge') == false
-
-    - name: Build and push Docker image for PR
-      uses: docker/build-push-action@v4
-      with:
-        context: "${{ inputs.folder }}"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ github.base_ref }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge')
