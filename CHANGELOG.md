@@ -1,3 +1,43 @@
+## stable-8922-1
+
+Based on stable release 8922-1.
+
+* b3abfc0 ci: split unstable build and test workflows (#1601)
+* 603d461 jibri: adapt to new ChromeDriver zip file structure
+* a76b1f4 jibri: simplify ChromeDriver download
+* fd1c308 jibri: fix new ChromeDriver API endpoints
+* 2c0a793 jibri: update Chrome to 116
+* 916bccb jibri: autoscaler sidecar tuning parameters
+* 6e59319 misc: working on unstable
+
+## stable-8922
+
+Based on stable release 8922.
+
+* 1cbb8f8 prosody: add hybrid_matrix_token as a new authentication method
+* b5b8ea2 jigasi: add toggle to enable REST shutdown
+* 6bb2455 jibri: add extra fonts
+* 497015b jicofo: add JICOFO_AUTH_LIFETIME as environment variable
+* f18acb4 jicofo, prosody: allow to set different AUTH_TYPE
+* dc1994a jicofo: remove shibboleth authentication options
+* 58d4736 misc: working on unstable
+
+## stable-8719
+
+Based on stable release 8719.
+
+* 6f72293 jibri: bump Chrome version
+* 94c7060 jibri: params to override statsd host and port
+* 0569bce jibri: add autoscaler-sidecar service support (#1562)
+* 57a7c22 jicofo: add ability to disable auth
+* a41578c prosody: update the comma logic while listing TURNs
+* 9776714 prosody: allow multiple TURN (#1559)
+* ce59d1e jibri: upgrade chrome to 113 (#1555)
+* c2f01f3 web: update livestreaming settings according to new config.js
+* e4c8c2a jibri: pre-warm chrome first before starting jibri (#1549)
+* 809f63c compose: add ability to configure the Jicofo REST port in the host
+* b81bd5c misc: working on unstable
+
 ## stable-8615
 
 Based on stable release 8615.

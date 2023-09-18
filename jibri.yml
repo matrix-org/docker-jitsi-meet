@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
     jibri:
-        image: jitsi/jibri:${JITSI_IMAGE_VERSION:-stable-8615}
+        image: jitsi/jibri:${JITSI_IMAGE_VERSION:-stable-8922-1}
         restart: ${RESTART_POLICY:-unless-stopped}
         volumes:
             - ${CONFIG}/jibri:/config:Z
@@ -11,11 +11,22 @@ services:
             - SYS_ADMIN
         environment:
             - ALL_MUTED_TIMEOUT
+            - AUTOSCALER_SIDECAR_KEY_FILE
+            - AUTOSCALER_SIDECAR_KEY_ID
+            - AUTOSCALER_SIDECAR_GROUP_NAME
+            - AUTOSCALER_SIDECAR_HOST_ID
+            - AUTOSCALER_SIDECAR_INSTANCE_ID
+            - AUTOSCALER_SIDECAR_PORT
+            - AUTOSCALER_SIDECAR_REGION
+            - AUTOSCALER_SIDECAR_SHUTDOWN_POLLING_INTERVAL
+            - AUTOSCALER_SIDECAR_STATS_POLLING_INTERVAL
+            - AUTOSCALER_URL
             - CHROMIUM_FLAGS
             - DEFAULT_CALL_EMPTY_TIMEOUT
             - DISPLAY=:0
             - ENABLE_STATS_D
             - ICE_CONNECTION_TIMEOUT
+            - JIBRI_WEBHOOK_SUBSCRIBERS
             - JIBRI_HTTP_API_EXTERNAL_PORT
             - JIBRI_HTTP_API_INTERNAL_PORT
             - JIBRI_RECORDING_RESOLUTION
@@ -28,6 +39,9 @@ services:
             - JIBRI_RECORDING_DIR
             - JIBRI_FINALIZE_RECORDING_SCRIPT_PATH
             - JIBRI_STRIP_DOMAIN_JID
+            - JIBRI_STATSD_HOST
+            - JIBRI_STATSD_PORT
+            - LOCAL_ADDRESS
             - NO_MEDIA_TIMEOUT
             - PUBLIC_URL
             - TZ

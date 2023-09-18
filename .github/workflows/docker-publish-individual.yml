@@ -1,0 +1,59 @@
+name: Docker Publish Jitsi Component
+
+on:
+  workflow_call:
+    inputs:
+      folder:
+        required: true
+        type: string
+    secrets:
+      github-token:
+        required: true
+
+env:
+  REGISTRY: ghcr.io
+  REGISTRY_BASE_PATH: ghcr.io/${{ github.repository }}
+  BASE_TAG: ${{ github.ref_name }}
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Log into registry ${{ env.REGISTRY }}
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.github-token }}
+
+    - name: Extract Docker metadata
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ env.REGISTRY_BASE_PATH }}/${{ inputs.folder }}
+        # Turn off auto-latest, as we want to exclude openshift tags from that
+        flavor: |
+          latest=false
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: "${{ inputs.folder }}"
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ format('{0}{1}{2}', steps.meta.outputs.tags, env.MAINLINE_TAG, env.OPENSHIFT_TAG) }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          "BASE_TAG=${{ contains(github.ref_name, '/merge') && github.base_ref || env.BASE_TAG }}"
+          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
+      env:
+        # Construct additional Docker tags if this is specific Git tags
+        MAINLINE_TAG: ${{ startsWith(github.ref, 'refs/tags/stable-') && format(',{0}/{1}:{2}', env.REGISTRY_BASE_PATH, inputs.folder, 'latest') || '' }}
+        OPENSHIFT_TAG: ${{ startsWith(github.ref, 'refs/tags/openshift-') && format(',{0}/{1}:{2}', env.REGISTRY_BASE_PATH, inputs.folder, 'openshift-latest') || '' }}

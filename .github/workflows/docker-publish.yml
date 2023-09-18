@@ -7,436 +7,80 @@ on:
   pull_request:
     branches: [ main, master, testing, openshift ]
 
-env:
-  REGISTRY: ghcr.io
-  REGISTRY_BASE_PATH: ghcr.io/${{ github.repository }}
-  BASE_TAG: ${{ github.ref_name }}
-
 jobs:
   build-push-base:
-    env:
-      IMAGE_NAME: base
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Log into registry ${{ env.REGISTRY }}
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Extract Docker metadata
-      id: meta
-      uses: docker/metadata-action@v3
-      with:
-        images: ${{ env.REGISTRY_BASE_PATH }}/${{ env.IMAGE_NAME }}
-
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: "base"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ env.BASE_TAG }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge') == false
-
-    - name: Build and push Docker image for PR
-      uses: docker/build-push-action@v2
-      with:
-        context: "base"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ github.base_ref }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge')
+    uses: ./.github/workflows/docker-publish-individual.yml
+    with:
+      folder: base
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
 
   build-push-base-java:
-    env:
-      IMAGE_NAME: base-java
-
-    runs-on: ubuntu-latest
-
     needs:
     - build-push-base
 
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Log into registry ${{ env.REGISTRY }}
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Extract Docker metadata
-      id: meta
-      uses: docker/metadata-action@v3
-      with:
-        images: ${{ env.REGISTRY_BASE_PATH }}/${{ env.IMAGE_NAME }}
-
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: "base-java"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ env.BASE_TAG }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge') == false
-
-    - name: Build and push Docker image for PR
-      uses: docker/build-push-action@v2
-      with:
-        context: "base-java"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ github.base_ref }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge')
+    uses: ./.github/workflows/docker-publish-individual.yml
+    with:
+      folder: base-java
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
 
   build-push-jibri:
-    env:
-      IMAGE_NAME: jibri
-
-    runs-on: ubuntu-latest
-
     needs:
     - build-push-base-java
 
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Log into registry ${{ env.REGISTRY }}
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Extract Docker metadata
-      id: meta
-      uses: docker/metadata-action@v3
-      with:
-        images: ${{ env.REGISTRY_BASE_PATH }}/${{ env.IMAGE_NAME }}
-
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: "jibri"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ env.BASE_TAG }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge') == false
-
-    - name: Build and push Docker image for PR
-      uses: docker/build-push-action@v2
-      with:
-        context: "jibri"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ github.base_ref }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge')
+    uses: ./.github/workflows/docker-publish-individual.yml
+    with:
+      folder: jibri
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
   
   build-push-jicofo:
-    env:
-      IMAGE_NAME: jicofo
-
-    runs-on: ubuntu-latest
-
     needs:
     - build-push-base-java
 
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Log into registry ${{ env.REGISTRY }}
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Extract Docker metadata
-      id: meta
-      uses: docker/metadata-action@v3
-      with:
-        images: ${{ env.REGISTRY_BASE_PATH }}/${{ env.IMAGE_NAME }}
-
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: "jicofo"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ env.BASE_TAG }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge') == false
-
-    - name: Build and push Docker image for PR
-      uses: docker/build-push-action@v2
-      with:
-        context: "jicofo"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ github.base_ref }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge')
+    uses: ./.github/workflows/docker-publish-individual.yml
+    with:
+      folder: jicofo
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
 
   build-push-jigasi:
-    env:
-      IMAGE_NAME: jigasi
-
-    runs-on: ubuntu-latest
-
     needs:
     - build-push-base-java
 
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Log into registry ${{ env.REGISTRY }}
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Extract Docker metadata
-      id: meta
-      uses: docker/metadata-action@v3
-      with:
-        images: ${{ env.REGISTRY_BASE_PATH }}/${{ env.IMAGE_NAME }}
-
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: "jigasi"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ env.BASE_TAG }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge') == false
-          
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: "jigasi"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ github.base_ref }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge')
+    uses: ./.github/workflows/docker-publish-individual.yml
+    with:
+      folder: jigasi
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
 
   build-push-jvb:
-    env:
-      IMAGE_NAME: jvb
-    
-    runs-on: ubuntu-latest
-
     needs:
     - build-push-base-java
 
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Log into registry ${{ env.REGISTRY }}
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Extract Docker metadata
-      id: meta
-      uses: docker/metadata-action@v3
-      with:
-        images: ${{ env.REGISTRY_BASE_PATH }}/${{ env.IMAGE_NAME }}
-
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: "jvb"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ env.BASE_TAG }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge') == false
-          
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: "jvb"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ github.base_ref }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge')
+    uses: ./.github/workflows/docker-publish-individual.yml
+    with:
+      folder: jvb
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
 
   build-push-prosody:
-    env:
-      IMAGE_NAME: prosody
-
-    runs-on: ubuntu-latest
-
     needs:
     - build-push-base
 
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Log into registry ${{ env.REGISTRY }}
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Extract Docker metadata
-      id: meta
-      uses: docker/metadata-action@v3
-      with:
-        images: ${{ env.REGISTRY_BASE_PATH }}/${{ env.IMAGE_NAME }}
-
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: "prosody"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ env.BASE_TAG }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge') == false
-          
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: "prosody"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ github.base_ref }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge')
+    uses: ./.github/workflows/docker-publish-individual.yml
+    with:
+      folder: prosody
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
 
   build-push-web:
-    env:
-      IMAGE_NAME: web
-
-    runs-on: ubuntu-latest
-
     needs:
     - build-push-base
-    
-    permissions:
-      contents: read
-      packages: write
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Log into registry ${{ env.REGISTRY }}
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Extract Docker metadata
-      id: meta
-      uses: docker/metadata-action@v3
-      with:
-        images: ${{ env.REGISTRY_BASE_PATH }}/${{ env.IMAGE_NAME }}
-
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: "web"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ env.BASE_TAG }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge') == false
-          
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: "web"
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          "BASE_TAG=${{ github.base_ref }}"
-          "JITSI_REPO=${{ env.REGISTRY_BASE_PATH }}"
-      if: contains(github.ref_name, '/merge')
+    uses: ./.github/workflows/docker-publish-individual.yml
+    with:
+      folder: web
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
