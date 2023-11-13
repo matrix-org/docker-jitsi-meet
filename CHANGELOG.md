@@ -1,3 +1,17 @@
+## stable-8960-1
+
+Based on stable release 8960-1.
+
+* 9bd3258 jibri: fix variable names
+* 807b7bf misc: working on unstable
+
+## stable-8960
+
+Based on stable release 8960.
+
+* 5c5575c jibri: make some ffmpeg arguments configurable via env variables
+* 09b0df4 misc: working on unstable
+
 ## stable-8922-1
 
 Based on stable release 8922-1.
