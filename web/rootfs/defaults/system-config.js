@@ -1,5 +1,6 @@
 {{ $CONFIG_EXTERNAL_CONNECT := .Env.CONFIG_EXTERNAL_CONNECT | default "false" | toBool -}}
 {{ $ENABLE_AUTH := .Env.ENABLE_AUTH | default "false" | toBool -}}
+{{ $ENABLE_AUTH_DOMAIN := .Env.ENABLE_AUTH_DOMAIN | default "true" | toBool -}}
 {{ $ENABLE_GUESTS := .Env.ENABLE_GUESTS | default "false" | toBool -}}
 {{ $ENABLE_SUBDOMAINS := .Env.ENABLE_SUBDOMAINS | default "true" | toBool -}}
 {{ $ENABLE_XMPP_WEBSOCKET := .Env.ENABLE_XMPP_WEBSOCKET | default "1" | toBool -}}
@@ -9,7 +10,7 @@
 {{ $XMPP_GUEST_DOMAIN := .Env.XMPP_GUEST_DOMAIN | default "guest.meet.jitsi" -}}
 {{ $XMPP_MUC_DOMAIN := .Env.XMPP_MUC_DOMAIN | default "muc.meet.jitsi" -}}
 {{ $XMPP_MUC_DOMAIN_PREFIX := (split "." $XMPP_MUC_DOMAIN)._0  -}}
-
+{{ $JVB_PREFER_SCTP := .Env.JVB_PREFER_SCTP | default "false" | toBool -}}
 // Jitsi Meet configuration.
 var config = {};
 
@@ -37,8 +38,10 @@ config.hosts.muc = '{{ $XMPP_MUC_DOMAIN }}';
 // When using authentication, domain for guest users.
 config.hosts.anonymousdomain = '{{ $XMPP_GUEST_DOMAIN }}';
 {{ end -}}
+{{ if $ENABLE_AUTH_DOMAIN -}}
 // Domain for authenticated users. Defaults to <domain>.
 config.hosts.authdomain = '{{ $XMPP_DOMAIN }}';
+{{ end -}}
 {{ end -}}
 
 config.bosh = '/http-bind';
@@ -57,4 +60,9 @@ config.externalConnectUrl = '/' + subdir + 'http-pre-bind';
 {{ else -}}
 config.externalConnectUrl = '/http-pre-bind';
 {{ end -}}
+{{ end -}}
+
+{{ if $JVB_PREFER_SCTP -}}
+if (!config.hasOwnProperty('bridgeChannel')) config.bridgeChannel = {};
+config.bridgeChannel.preferSctp=true;
 {{ end -}}
