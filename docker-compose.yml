@@ -3,7 +3,7 @@ version: '3.5'
 services:
     # Frontend
     web:
-        image: jitsi/web:${JITSI_IMAGE_VERSION:-stable-9078}
+        image: jitsi/web:${JITSI_IMAGE_VERSION:-stable-9111}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '${HTTP_PORT}:80'
@@ -24,6 +24,8 @@ services:
             - CALLSTATS_SECRET
             - CHROME_EXTENSION_BANNER_JSON
             - COLIBRI_WEBSOCKET_PORT
+            - COLIBRI_WEBSOCKET_JVB_LOOKUP_NAME
+            - COLIBRI_WEBSOCKET_REGEX
             - CONFCODE_URL
             - CONFIG_EXTERNAL_CONNECT
             - DEFAULT_LANGUAGE
@@ -38,6 +40,7 @@ services:
             - DIALOUT_AUTH_URL
             - DIALOUT_CODES_URL
             - DISABLE_AUDIO_LEVELS
+            - DISABLE_COLIBRI_WEBSOCKET_JVB_LOOKUP
             - DISABLE_DEEP_LINKING
             - DISABLE_GRANT_MODERATOR
             - DISABLE_HTTPS
@@ -58,6 +61,7 @@ services:
             - ENABLE_BREAKOUT_ROOMS
             - ENABLE_CALENDAR
             - ENABLE_COLIBRI_WEBSOCKET
+            - ENABLE_COLIBRI_WEBSOCKET_UNSAFE_REGEX
             - ENABLE_E2EPING
             - ENABLE_FILE_RECORDING_SHARING
             - ENABLE_GUESTS
@@ -147,6 +151,9 @@ services:
             - VIDEOQUALITY_BITRATE_VP9_LOW
             - VIDEOQUALITY_BITRATE_VP9_STANDARD
             - VIDEOQUALITY_BITRATE_VP9_HIGH
+            - VIDEOQUALITY_BITRATE_AV1_LOW
+            - VIDEOQUALITY_BITRATE_AV1_STANDARD
+            - VIDEOQUALITY_BITRATE_AV1_HIGH
             - VIDEOQUALITY_ENFORCE_PREFERRED_CODEC
             - VIDEOQUALITY_PREFERRED_CODEC
             - XMPP_AUTH_DOMAIN
@@ -163,7 +170,7 @@ services:
 
     # XMPP server
     prosody:
-        image: jitsi/prosody:${JITSI_IMAGE_VERSION:-stable-9078}
+        image: jitsi/prosody:${JITSI_IMAGE_VERSION:-stable-9111}
         restart: ${RESTART_POLICY:-unless-stopped}
         expose:
             - '${XMPP_PORT:-5222}'
@@ -257,6 +264,8 @@ services:
             - PROSODY_VISITOR_INDEX
             - PROSODY_VISITORS_MUC_PREFIX
             - PUBLIC_URL
+            - STUN_HOST
+            - STUN_PORT
             - TURN_CREDENTIALS
             - TURN_HOST
             - TURNS_HOST
@@ -290,7 +299,7 @@ services:
 
     # Focus component
     jicofo:
-        image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-stable-9078}
+        image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-stable-9111}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '127.0.0.1:${JICOFO_REST_PORT:-8888}:8888'
@@ -304,6 +313,7 @@ services:
             - ENABLE_AUTO_OWNER
             - ENABLE_CODEC_VP8
             - ENABLE_CODEC_VP9
+            - ENABLE_CODEC_AV1
             - ENABLE_CODEC_H264
             - ENABLE_CODEC_OPUS_RED
             - ENABLE_JVB_XMPP_SERVER
@@ -366,7 +376,7 @@ services:
 
     # Video bridge
     jvb:
-        image: jitsi/jvb:${JITSI_IMAGE_VERSION:-stable-9078}
+        image: jitsi/jvb:${JITSI_IMAGE_VERSION:-stable-9111}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '${JVB_PORT:-10000}:${JVB_PORT:-10000}/udp'
