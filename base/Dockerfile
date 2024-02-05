@@ -3,16 +3,18 @@ FROM docker.io/library/debian:bullseye-slim
 ENV DEBIAN_FRONTEND noninteractive
 
 ARG JITSI_RELEASE=stable
-ARG TARGETPLATFORM
 COPY rootfs /
 
-RUN case ${TARGETPLATFORM} in \
-    "linux/amd64")  TPL_ARCH=amd64  ;; \
-    "linux/arm64")  TPL_ARCH=arm64  ;; \
+RUN \
+    dpkgArch="$(dpkg --print-architecture)" && \
+    case "${dpkgArch##*-}" in \
+        "amd64") TPL_ARCH=amd64; S6_ARCH=amd64 ;; \
+        "arm64") TPL_ARCH=arm64; S6_ARCH=aarch64 ;; \
+        *) echo "unsupported architecture"; exit 1 ;; \
     esac && \
     apt-dpkg-wrap apt-get update && \
     apt-dpkg-wrap apt-get install -y apt-transport-https apt-utils ca-certificates gnupg wget && \
-    wget -qO /usr/bin/tpl https://github.com/jitsi/tpl/releases/download/v1.0.4/tpl-linux-${TPL_ARCH} && \
+    wget -qO /usr/bin/tpl https://github.com/jitsi/tpl/releases/download/v1.1.1/tpl-linux-${TPL_ARCH} && \
     wget -qO - https://download.jitsi.org/jitsi-key.gpg.key | gpg --dearmour > /etc/apt/trusted.gpg.d/jitsi.gpg && \
     echo "deb https://download.jitsi.org $JITSI_RELEASE/" > /etc/apt/sources.list.d/jitsi.list && \
     echo "deb http://ftp.debian.org/debian bullseye-backports main" > /etc/apt/sources.list.d/backports.list && \

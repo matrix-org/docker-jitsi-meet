@@ -1,9 +1,11 @@
+{{ $C2S_REQUIRE_ENCRYPTION := .Env.PROSODY_C2S_REQUIRE_ENCRYPTION | default "1" | toBool -}}
 {{ $ENABLE_AUTH := .Env.ENABLE_AUTH | default "0" | toBool -}}
 {{ $ENABLE_VISITORS := .Env.ENABLE_VISITORS | default "0" | toBool -}}
 {{ $AUTH_TYPE := .Env.AUTH_TYPE | default "internal" -}}
 {{ $PROSODY_AUTH_TYPE := .Env.PROSODY_AUTH_TYPE | default $AUTH_TYPE -}}
 {{ $ENABLE_GUEST_DOMAIN := and $ENABLE_AUTH (.Env.ENABLE_GUESTS | default "0" | toBool) -}}
 {{ $ENABLE_RECORDING := .Env.ENABLE_RECORDING | default "0" | toBool -}}
+{{ $ENABLE_TRANSCRIPTIONS := .Env.ENABLE_TRANSCRIPTIONS | default "0" | toBool -}}
 {{ $JIBRI_XMPP_USER := .Env.JIBRI_XMPP_USER | default "jibri" -}}
 {{ $JIGASI_XMPP_USER := .Env.JIGASI_XMPP_USER | default "jigasi" -}}
 {{ $JVB_AUTH_USER := .Env.JVB_AUTH_USER | default "jvb" -}}
@@ -13,6 +15,7 @@
 {{ $JWT_ENABLE_DOMAIN_VERIFICATION := .Env.JWT_ENABLE_DOMAIN_VERIFICATION | default "false" | toBool -}}
 {{ $MATRIX_UVS_ISSUER := .Env.MATRIX_UVS_ISSUER | default "issuer" -}}
 {{ $MATRIX_UVS_SYNC_POWER_LEVELS := .Env.MATRIX_UVS_SYNC_POWER_LEVELS | default "0" | toBool -}}
+{{ $MATRIX_LOBBY_BYPASS := .Env.MATRIX_LOBBY_BYPASS | default "0" | toBool -}}
 {{ $JWT_TOKEN_AUTH_MODULE := .Env.JWT_TOKEN_AUTH_MODULE | default "token_verification" -}}
 {{ $ENABLE_LOBBY := .Env.ENABLE_LOBBY | default "true" | toBool -}}
 {{ $ENABLE_AV_MODERATION := .Env.ENABLE_AV_MODERATION | default "true" | toBool -}}
@@ -117,6 +120,13 @@ asap_accepted_audiences = { "{{ join "\",\"" (splitList "," .Env.JWT_ACCEPTED_AU
 consider_bosh_secure = true;
 consider_websocket_secure = true;
 
+{{ if $ENABLE_XMPP_WEBSOCKET }}
+smacks_max_unacked_stanzas = 5;
+smacks_hibernation_time = 60;
+smacks_max_hibernated_sessions = 1;
+smacks_max_old_sessions = 1;
+{{ end }}
+
 {{ if $ENABLE_JAAS_COMPONENTS }}
 VirtualHost "jigasi.meet.jitsi"
     modules_enabled = {
@@ -194,7 +204,6 @@ VirtualHost "{{ $XMPP_DOMAIN }}"
         "websocket";
         "smacks"; -- XEP-0198: Stream Management
         {{ end }}
-        "pubsub";
         "ping";
         "speakerstats";
         "conference_duration";
@@ -256,7 +265,7 @@ VirtualHost "{{ $XMPP_DOMAIN }}"
     av_moderation_component = "avmoderation.{{ $XMPP_DOMAIN }}"
     {{ end }}
 
-    c2s_require_encryption = false
+    c2s_require_encryption = {{ $C2S_REQUIRE_ENCRYPTION }}
 
     {{ if $ENABLE_VISITORS -}}
     visitors_ignore_list = { "{{ $XMPP_RECORDER_DOMAIN }}" }
@@ -271,9 +280,12 @@ VirtualHost "{{ $XMPP_GUEST_DOMAIN }}"
     authentication = "{{ $GUEST_AUTH_TYPE }}"
     modules_enabled = {
         "ping";
+        {{ if $ENABLE_XMPP_WEBSOCKET }}
+        "smacks"; -- XEP-0198: Stream Management
+        {{ end }}
     }
 
-    c2s_require_encryption = false
+    c2s_require_encryption = {{ $C2S_REQUIRE_ENCRYPTION }}
     {{ if $ENABLE_VISITORS }}
     allow_anonymous_s2s = true
     {{ end }}
@@ -309,8 +321,10 @@ Component "{{ $XMPP_INTERNAL_MUC_DOMAIN }}" "muc"
         {{ end -}}
     }
     restrict_room_creation = true
+    muc_filter_whitelist="{{ $XMPP_AUTH_DOMAIN }}"
     muc_room_locking = false
     muc_room_default_public_jids = true
+    muc_room_cache_size = 1000
 
 Component "{{ $XMPP_MUC_DOMAIN }}" "muc"
     restrict_room_creation = true
@@ -332,6 +346,9 @@ Component "{{ $XMPP_MUC_DOMAIN }}" "muc"
         {{end}}
         {{ if and $ENABLE_AUTH (eq $PROSODY_AUTH_TYPE "hybrid_matrix_token") $MATRIX_UVS_SYNC_POWER_LEVELS -}}
         "matrix_affiliation";
+        {{ end -}}
+        {{ if and $ENABLE_AUTH (eq $PROSODY_AUTH_TYPE "hybrid_matrix_token") $MATRIX_LOBBY_BYPASS -}}
+        "matrix_lobby_bypass";
         {{ end -}}
         {{ if not $DISABLE_POLLS -}}
         "polls";
@@ -384,7 +401,13 @@ Component "{{ $XMPP_MUC_DOMAIN }}" "muc"
     muc_max_occupants = "{{ .Env.MAX_PARTICIPANTS }}"
     {{ end }}
     muc_password_whitelist = {
-        "focus@{{ .Env.XMPP_AUTH_DOMAIN }}"
+        "focus@{{ .Env.XMPP_AUTH_DOMAIN }}";
+{{- if $ENABLE_RECORDING }}
+        "{{ $JIBRI_RECORDER_USER }}@{{ $XMPP_RECORDER_DOMAIN }}";
+{{- end }}
+{{- if $ENABLE_TRANSCRIPTIONS }}
+        "{{ $JIGASI_TRANSCRIBER_USER }}@{{ $XMPP_RECORDER_DOMAIN }}";
+{{- end }}
     }
 
 Component "focus.{{ $XMPP_DOMAIN }}" "client_proxy"
@@ -435,9 +458,6 @@ Component "breakout.{{ $XMPP_DOMAIN }}" "muc"
     muc_room_allow_persistent = false
     modules_enabled = {
         "muc_meeting_id";
-        {{ if $ENABLE_SUBDOMAINS -}}
-        "muc_domain_mapper";
-        {{ end -}}
         {{ if not $DISABLE_POLLS -}}
         "polls";
         {{ end -}}

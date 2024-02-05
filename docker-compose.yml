@@ -3,7 +3,7 @@ version: '3.5'
 services:
     # Frontend
     web:
-        image: jitsi/web:${JITSI_IMAGE_VERSION:-stable-9111}
+        image: jitsi/web:${JITSI_IMAGE_VERSION:-stable-9220-1}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '${HTTP_PORT}:80'
@@ -19,21 +19,19 @@ services:
             - AUDIO_QUALITY_OPUS_BITRATE
             - AUTO_CAPTION_ON_RECORD
             - BRANDING_DATA_URL
-            - CALLSTATS_CUSTOM_SCRIPT_URL
-            - CALLSTATS_ID
-            - CALLSTATS_SECRET
+            - BOSH_RELATIVE
             - CHROME_EXTENSION_BANNER_JSON
             - COLIBRI_WEBSOCKET_PORT
             - COLIBRI_WEBSOCKET_JVB_LOOKUP_NAME
             - COLIBRI_WEBSOCKET_REGEX
             - CONFCODE_URL
-            - CONFIG_EXTERNAL_CONNECT
             - DEFAULT_LANGUAGE
             - DEPLOYMENTINFO_ENVIRONMENT
             - DEPLOYMENTINFO_ENVIRONMENT_TYPE
             - DEPLOYMENTINFO_REGION
             - DEPLOYMENTINFO_SHARD
             - DEPLOYMENTINFO_USERREGION
+            - DESKTOP_SHARING_FRAMERATE_AUTO
             - DESKTOP_SHARING_FRAMERATE_MIN
             - DESKTOP_SHARING_FRAMERATE_MAX
             - DIALIN_NUMBERS_URL
@@ -69,7 +67,6 @@ services:
             - ENABLE_HTTP_REDIRECT
             - ENABLE_IPV6
             - ENABLE_LETSENCRYPT
-            - ENABLE_LIPSYNC
             - ENABLE_NO_AUDIO_DETECTION
             - ENABLE_NOISY_MIC_DETECTION
             - ENABLE_OCTO
@@ -83,6 +80,7 @@ services:
             - ENABLE_LIVESTREAMING_HELP_LINK
             - ENABLE_LIVESTREAMING_TERMS_LINK
             - ENABLE_LIVESTREAMING_VALIDATOR_REGEXP_STRING
+            - ENABLE_LOAD_TEST_CLIENT
             - ENABLE_LOCAL_RECORDING_NOTIFY_ALL_PARTICIPANT
             - ENABLE_LOCAL_RECORDING_SELF_START
             - ENABLE_RECORDING
@@ -129,13 +127,11 @@ services:
             - RESOLUTION_WIDTH_MIN
             - START_AUDIO_MUTED
             - START_AUDIO_ONLY
-            - START_BITRATE
             - START_SILENT
             - START_WITH_AUDIO_MUTED
             - START_VIDEO_MUTED
             - START_WITH_VIDEO_MUTED
-            - TESTING_CAP_SCREENSHARE_BITRATE
-            - TESTING_OCTO_PROBABILITY
+            - TESTING_AV1_SUPPORT
             - TOKEN_AUTH_URL
             - TOOLBAR_BUTTONS
             - TRANSLATION_LANGUAGES
@@ -145,16 +141,19 @@ services:
             - VIDEOQUALITY_BITRATE_H264_LOW
             - VIDEOQUALITY_BITRATE_H264_STANDARD
             - VIDEOQUALITY_BITRATE_H264_HIGH
+            - VIDEOQUALITY_BITRATE_H264_SS_HIGH
             - VIDEOQUALITY_BITRATE_VP8_LOW
             - VIDEOQUALITY_BITRATE_VP8_STANDARD
             - VIDEOQUALITY_BITRATE_VP8_HIGH
+            - VIDEOQUALITY_BITRATE_VP8_SS_HIGH
             - VIDEOQUALITY_BITRATE_VP9_LOW
             - VIDEOQUALITY_BITRATE_VP9_STANDARD
             - VIDEOQUALITY_BITRATE_VP9_HIGH
+            - VIDEOQUALITY_BITRATE_VP9_SS_HIGH
             - VIDEOQUALITY_BITRATE_AV1_LOW
             - VIDEOQUALITY_BITRATE_AV1_STANDARD
             - VIDEOQUALITY_BITRATE_AV1_HIGH
-            - VIDEOQUALITY_ENFORCE_PREFERRED_CODEC
+            - VIDEOQUALITY_BITRATE_AV1_SS_HIGH
             - VIDEOQUALITY_PREFERRED_CODEC
             - XMPP_AUTH_DOMAIN
             - XMPP_BOSH_URL_BASE
@@ -170,7 +169,7 @@ services:
 
                 # XMPP server
     prosody:
-        image: jitsi/prosody:${JITSI_IMAGE_VERSION:-stable-9111}
+        image: jitsi/prosody:${JITSI_IMAGE_VERSION:-stable-9220-1}
         restart: ${RESTART_POLICY:-unless-stopped}
         expose:
             - '${XMPP_PORT:-5222}'
@@ -205,6 +204,7 @@ services:
             - GLOBAL_MODULES
             - JIBRI_RECORDER_USER
             - JIBRI_RECORDER_PASSWORD
+            - JIBRI_SIP_BREWERY_MUC
             - JIBRI_XMPP_USER
             - JIBRI_XMPP_PASSWORD
             - JICOFO_AUTH_PASSWORD
@@ -226,6 +226,7 @@ services:
             - MATRIX_UVS_ISSUER
             - MATRIX_UVS_AUTH_TOKEN
             - MATRIX_UVS_SYNC_POWER_LEVELS
+            - MATRIX_LOBBY_BYPASS
             - LOG_LEVEL
             - LDAP_AUTH_METHOD
             - LDAP_BASE
@@ -299,7 +300,7 @@ services:
 
     # Focus component
     jicofo:
-        image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-stable-9111}
+        image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-stable-9220-1}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '127.0.0.1:${JICOFO_REST_PORT:-8888}:8888'
@@ -318,6 +319,7 @@ services:
             - ENABLE_CODEC_OPUS_RED
             - ENABLE_JVB_XMPP_SERVER
             - ENABLE_OCTO
+            - ENABLE_OCTO_SCTP
             - ENABLE_RECORDING
             - ENABLE_SCTP
             - ENABLE_VISITORS
@@ -338,8 +340,10 @@ services:
             - JICOFO_ENABLE_HEALTH_CHECKS
             - JICOFO_ENABLE_REST
             - JICOFO_HEALTH_CHECKS_USE_PRESENCE
+            - JICOFO_MAX_MEMORY
             - JICOFO_MULTI_STREAM_BACKWARD_COMPAT
             - JICOFO_OCTO_REGION
+            - JICOFO_TRUSTED_DOMAINS
             - JIBRI_BREWERY_MUC
             - JIBRI_REQUEST_RETRIES
             - JIBRI_PENDING_TIMEOUT
@@ -359,6 +363,7 @@ services:
             - TZ
             - VISITORS_MAX_PARTICIPANTS
             - VISITORS_MAX_VISITORS_PER_NODE
+            - VISITORS_XMPP_AUTH_DOMAIN
             - VISITORS_XMPP_SERVER
             - VISITORS_XMPP_DOMAIN
             - XMPP_DOMAIN
@@ -369,6 +374,8 @@ services:
             - XMPP_REPLY_TIMEOUT
             - XMPP_SERVER
             - XMPP_PORT
+            - MAX_SSRCS_PER_USER
+            - MAX_SSRC_GROUPS_PER_USER
         depends_on:
             - prosody
         networks:
@@ -376,7 +383,7 @@ services:
 
                 # Video bridge
     jvb:
-        image: jitsi/jvb:${JITSI_IMAGE_VERSION:-stable-9111}
+        image: jitsi/jvb:${JITSI_IMAGE_VERSION:-stable-9220-1}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '${JVB_PORT:-10000}:${JVB_PORT:-10000}/udp'
@@ -407,9 +414,11 @@ services:
             - JVB_PORT
             - JVB_MUC_NICKNAME
             - JVB_STUN_SERVERS
+            - JVB_LOG_FILE
             - JVB_OCTO_BIND_ADDRESS
             - JVB_OCTO_REGION
             - JVB_OCTO_RELAY_ID
+            - JVB_REQUIRE_VALID_ADDRESS
             - JVB_WS_DOMAIN
             - JVB_WS_SERVER_ID
             - JVB_ENABLE_WS_COMPRESSION
@@ -424,6 +433,7 @@ services:
             - COLIBRI_REST_ENABLED
             - SHUTDOWN_REST_ENABLED
             - TZ
+            - VIDEOBRIDGE_MAX_MEMORY
             - XMPP_AUTH_DOMAIN
             - XMPP_INTERNAL_MUC_DOMAIN
             - XMPP_SERVER
