@@ -6,6 +6,14 @@ on:
       folder:
         required: true
         type: string
+      repository:
+        required: false
+        type: string
+        default: ""
+      ref:
+        required: false
+        type: string
+        default: ""
     secrets:
       github-token:
         required: true
@@ -26,6 +34,14 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+
+    - name: Checkout other repository
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ inputs.repository }}
+        ref: ${{ inputs.ref }}
+        path: ${{ inputs.folder }}
+      if: ${{ inputs.repository != '' }}
 
     - name: Log into registry ${{ env.REGISTRY }}
       uses: docker/login-action@v2
