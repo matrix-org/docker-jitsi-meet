@@ -84,3 +84,12 @@ jobs:
       folder: web
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  build-push-excalidraw:
+    uses: ./.github/workflows/docker-publish-individual.yml
+    with:
+      folder: excalidraw-backend
+      repository: jitsi/excalidraw-backend
+      ref: "x21"
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
