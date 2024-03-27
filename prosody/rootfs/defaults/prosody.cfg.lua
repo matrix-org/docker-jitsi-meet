@@ -4,7 +4,7 @@
 {{ $ENABLE_VISITORS := .Env.ENABLE_VISITORS | default "0" | toBool -}}
 {{ $ENABLE_S2S := or $ENABLE_VISITORS ( .Env.PROSODY_ENABLE_S2S | default "0" | toBool ) }}
 {{ $ENABLE_IPV6 := .Env.ENABLE_IPV6 | default "true" | toBool -}}
-{{ $GC_TYPE := .Env.GC_TYPE | default "incremental" -}}
+{{ $GC_TYPE := .Env.GC_TYPE | default "generational" -}}
 {{ $GC_INC_TH := .Env.GC_INC_TH | default 150 -}}
 {{ $GC_INC_SPEED := .Env.GC_INC_SPEED | default 250 -}}
 {{ $GC_INC_STEP_SIZE := .Env.GC_INC_STEP_SIZE | default 13 -}}
@@ -131,7 +131,8 @@ firewall_scripts = {
 -- These modules are auto-loaded, but should you want
 -- to disable them then uncomment them here:
 modules_disabled = {
-	-- "offline"; -- Store offline messages
+    "offline"; -- Store offline messages
+    "register";
 	-- "c2s"; -- Handle client connections
 
 	{{ if not $ENABLE_S2S -}}
