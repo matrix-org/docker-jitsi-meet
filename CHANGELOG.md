@@ -1,3 +1,44 @@
+## stable-9364-1
+
+Based on stable release 9364-1.
+
+* a5ebb99 jibri: flag to support prometheus-style metrics (#1768)
+* 80fc10e feat(prosody): Cleans up gc settings.
+* 69bba17 feat(prosody): Adjusts lua to use generational GC for brewery.cfg.lua.
+* 2798426 feat(prosody): Adjusts lua to use generational GC.
+* 28d2b32 feat(prosody): Make sure muc tumbstones is disabled.
+* d5df19d jigasi: autoscaler sidecar support (#1738)
+* 0953ca0 jigasi: skip SIP configuration when configured as a transcriber
+* ca1d670 fix: :bug: wrong quote in default config (#1761)
+* 360361e jibri: move xmpp config for easier override (#1748)
+* 452f5ba misc: working on unstable
+
+## stable-9364
+
+Based on stable release 9364.
+
+* ca61ea2 jibri: add ability to ignore certificate errors
+* 615396e java: use Java 17
+* 140db22 jibri: check for chrome bin before pre-warm (#1757)
+* 648612f feat(prosody): Always report visitors support when enabled.
+* 28f3cf8 jvb: lipcap from apt to allow for pcap dumps (#1747)
+* 33350c3 prosody: fix env var default value
+* d6dc1e3 base-java: install nodejs 20 from nodesource
+* 8f84f2f jibri: use storage.googleapis.com location for chromedriver
+* 1bbb4ab fix(prosody): Updates a rate whitelist config that changed in jitsi-meet. (#1741)
+* eccf68e misc: working on unstable
+
+## stable-9258
+
+Based on stable release 9258.
+
+* a198d56 compose: add jvb dependency to web container (#1739)
+* 5c5742b prosody: var for speakerstats modules
+* a1d1f2c web: Add env vars for setting 1080p and 4k bitrates.
+* bb69407 Remove "ping" in ViarualHosts (#1728)
+* 14efd9c prosody: disable "offline" and "register" modules. (#1727)
+* 8e28256 misc: working on unstable
+
 ## stable-9220-1
 
 Based on stable release 9220-1.
