@@ -13,8 +13,8 @@ RUN \
         *) echo "unsupported architecture"; exit 1 ;; \
     esac && \
     apt-dpkg-wrap apt-get update && \
-    apt-dpkg-wrap apt-get install -y apt-transport-https apt-utils ca-certificates gnupg wget && \
-    wget -qO /usr/bin/tpl https://github.com/jitsi/tpl/releases/download/v1.3.0/tpl-linux-${TPL_ARCH} && \
+    apt-dpkg-wrap apt-get install -y apt-transport-https apt-utils ca-certificates gnupg wget curl && \
+    wget -qO /usr/bin/tpl https://github.com/jitsi/tpl/releases/download/v1.4.0/tpl-linux-${TPL_ARCH} && \
     wget -qO - https://download.jitsi.org/jitsi-key.gpg.key | gpg --dearmour > /etc/apt/trusted.gpg.d/jitsi.gpg && \
     echo "deb https://download.jitsi.org $JITSI_RELEASE/" > /etc/apt/sources.list.d/jitsi.list && \
     echo "deb http://ftp.debian.org/debian bookworm-backports main" > /etc/apt/sources.list.d/backports.list && \
