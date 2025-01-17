@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
     jibri:
-        image: jitsi/jibri:${JITSI_IMAGE_VERSION:-stable-9646}
+        image: jitsi/jibri:${JITSI_IMAGE_VERSION:-stable-9955}
         restart: ${RESTART_POLICY:-unless-stopped}
         volumes:
             - ${CONFIG}/jibri:/config:Z
@@ -59,9 +59,10 @@ services:
             - XMPP_DOMAIN
             - XMPP_INTERNAL_MUC_DOMAIN
             - XMPP_MUC_DOMAIN
-            - XMPP_RECORDER_DOMAIN
+            - XMPP_HIDDEN_DOMAIN
             - XMPP_SERVER
             - XMPP_PORT
+            - XMPP_RECORDER_DOMAIN
             - XMPP_TRUST_ALL_CERTS
         depends_on:
             - jicofo
