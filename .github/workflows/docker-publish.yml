@@ -90,6 +90,6 @@ jobs:
     with:
       folder: excalidraw-backend
       repository: jitsi/excalidraw-backend
-      ref: "x21"
+      ref: "master"
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
