@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
     jibri:
-        image: jitsi/jibri:${JITSI_IMAGE_VERSION:-stable-9955}
+        image: jitsi/jibri:${JITSI_IMAGE_VERSION:-stable-10078-1}
         restart: ${RESTART_POLICY:-unless-stopped}
         volumes:
             - ${CONFIG}/jibri:/config:Z
@@ -33,7 +33,8 @@ services:
             - JIBRI_HTTP_API_EXTERNAL_PORT
             - JIBRI_HTTP_API_INTERNAL_PORT
             - JIBRI_RECORDING_RESOLUTION
-            - JIBRI_RECORDING_VIDEO_ENCODE_PRESET
+            - JIBRI_RECORDING_VIDEO_ENCODE_PRESET_RECORDING
+            - JIBRI_RECORDING_VIDEO_ENCODE_PRESET_STREAMING
             - JIBRI_RECORDING_CONSTANT_RATE_FACTOR
             - JIBRI_RECORDING_FRAMERATE
             - JIBRI_RECORDING_QUEUE_SIZE

@@ -3,7 +3,7 @@ version: '3.5'
 services:
     # Frontend
     web:
-        image: jitsi/web:${JITSI_IMAGE_VERSION:-stable-9955}
+        image: jitsi/web:${JITSI_IMAGE_VERSION:-stable-10078-1}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '${HTTP_PORT}:80'
@@ -38,7 +38,6 @@ services:
             - DEPLOYMENTINFO_ENVIRONMENT_TYPE
             - DEPLOYMENTINFO_REGION
             - DEPLOYMENTINFO_SHARD
-            - DEPLOYMENTINFO_USERREGION
             - DESKTOP_SHARING_FRAMERATE_AUTO
             - DESKTOP_SHARING_FRAMERATE_MIN
             - DESKTOP_SHARING_FRAMERATE_MAX
@@ -192,7 +191,7 @@ services:
 
                 # XMPP server
     prosody:
-        image: jitsi/prosody:${JITSI_IMAGE_VERSION:-stable-9955}
+        image: jitsi/prosody:${JITSI_IMAGE_VERSION:-stable-10078-1}
         restart: ${RESTART_POLICY:-unless-stopped}
         expose:
             - '${XMPP_PORT:-5222}'
@@ -341,7 +340,7 @@ services:
 
     # Focus component
     jicofo:
-        image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-stable-9955}
+        image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-stable-10078-1}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '127.0.0.1:${JICOFO_REST_PORT:-8888}:8888'
@@ -366,6 +365,7 @@ services:
             - ENABLE_OCTO_SCTP
             - ENABLE_RECORDING
             - ENABLE_SCTP
+            - ENABLE_SHARED_DOCUMENT_RANDOM_NAME
             - ENABLE_TRANSCRIPTIONS
             - ENABLE_VISITORS
             - ENABLE_AUTO_LOGIN
@@ -383,6 +383,7 @@ services:
             - JICOFO_CONF_STRIP_SIMULCAST
             - JICOFO_CONF_SSRC_REWRITING
             - JICOFO_ENABLE_HEALTH_CHECKS
+            - JICOFO_ENABLE_ICE_FAILURE_DETECTION
             - JICOFO_ENABLE_REST
             - JICOFO_HEALTH_CHECKS_USE_PRESENCE
             - JICOFO_MAX_MEMORY
@@ -430,7 +431,7 @@ services:
 
                 # Video bridge
     jvb:
-        image: jitsi/jvb:${JITSI_IMAGE_VERSION:-stable-9955}
+        image: jitsi/jvb:${JITSI_IMAGE_VERSION:-stable-10078-1}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '${JVB_PORT:-10000}:${JVB_PORT:-10000}/udp'

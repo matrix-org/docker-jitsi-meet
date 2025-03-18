@@ -1,4 +1,3 @@
-{{ $DEPLOYMENTINFO_USERREGION := .Env.DEPLOYMENTINFO_USERREGION | default "" -}}
 {{ $ENABLE_ADAPTIVE_MODE := .Env.ENABLE_ADAPTIVE_MODE | default "true" | toBool -}}
 {{ $ENABLE_AUDIO_PROCESSING := .Env.ENABLE_AUDIO_PROCESSING | default "true" | toBool -}}
 {{ $ENABLE_AUTOMATIC_GAIN_CONTROL := .Env.ENABLE_AUTOMATIC_GAIN_CONTROL | default "true" | toBool -}}
@@ -138,7 +137,7 @@ config.p2p = {
 };
 
 {{ if .Env.P2P_STUN_SERVERS -}}
-config.p2p.stunServers = '{{ .Env.P2P_STUN_SERVERS }}'.split(',').map(url => ({ urls: 'stun:' + url }));
+config.p2p.stunServers = '{{ .Env.P2P_STUN_SERVERS }}'.split(',').map(function (url) { return { urls: 'stun:' + url }; } );
 
 {{ end -}}
 
@@ -400,10 +399,6 @@ config.deploymentInfo.envType = '{{ .Env.DEPLOYMENTINFO_ENVIRONMENT_TYPE }}';
 
 {{ if .Env.DEPLOYMENTINFO_REGION -}}
 config.deploymentInfo.region = '{{ .Env.DEPLOYMENTINFO_REGION }}';
-{{ end -}}
-
-{{ if $DEPLOYMENTINFO_USERREGION -}}
-config.deploymentInfo.userRegion = '{{ $DEPLOYMENTINFO_USERREGION }}';
 {{ end -}}
 
 // Deep Linking
