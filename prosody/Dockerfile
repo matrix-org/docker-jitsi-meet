@@ -83,7 +83,8 @@ RUN mkdir -pm775 /config && \
     chgrp -R 0 /var/run/saslauthd && \
     chmod -R g=u /var/run/saslauthd && \
     chgrp -R 0 /defaults && \
-    chmod -R g=u /defaults
+    chmod -R g=u /defaults && \
+    chmod -R 775 /prosody-plugins /prosody-plugins-contrib
 
 EXPOSE 5222 5280
 
