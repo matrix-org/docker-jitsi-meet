@@ -256,8 +256,11 @@ VirtualHost "{{ $XMPP_GUEST_DOMAIN }}"
         {{ if $ENABLE_XMPP_WEBSOCKET }}
         "smacks"; -- XEP-0198: Stream Management
         {{ end }}
+        {{ if .Env.XMPP_MODULES }}
+        "{{ join "\";\n        \"" (splitList "," .Env.XMPP_MODULES | compact) }}";
+        {{ end }}
     }
-
+    main_muc = "{{ $XMPP_MUC_DOMAIN }}"
     c2s_require_encryption = {{ $C2S_REQUIRE_ENCRYPTION }}
     {{ if $ENABLE_VISITORS }}
     allow_anonymous_s2s = true
@@ -309,6 +312,7 @@ Component "{{ $XMPP_MUC_DOMAIN }}" "muc"
     restrict_room_creation = true
     storage = "memory"
     modules_enabled = {
+        "muc_hide_all";
         "muc_meeting_id";
         {{ if .Env.XMPP_MUC_MODULES -}}
         "{{ join "\";\n        \"" (splitList "," .Env.XMPP_MUC_MODULES | compact) }}";
@@ -438,6 +442,7 @@ Component "lobby.{{ $XMPP_DOMAIN }}" "muc"
     muc_max_occupants = "{{ .Env.MAX_PARTICIPANTS }}"
     {{- end }}
     modules_enabled = {
+        "muc_hide_all";
         {{- if $ENABLE_RATE_LIMITS }}
         "muc_rate_limit";
         {{- end }}
@@ -461,6 +466,7 @@ Component "breakout.{{ $XMPP_DOMAIN }}" "muc"
     muc_tombstones = false
     muc_room_allow_persistent = false
     modules_enabled = {
+        "muc_hide_all";
         "muc_meeting_id";
         {{ if not $DISABLE_POLLS -}}
         "polls";
