@@ -1,9 +1,7 @@
-version: '3.5'
-
 services:
     # Frontend
     web:
-        image: jitsi/web:${JITSI_IMAGE_VERSION:-stable-10184}
+        image: jitsi/web:${JITSI_IMAGE_VERSION:-stable-10314}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '${HTTP_PORT}:80'
@@ -192,7 +190,7 @@ services:
 
     # XMPP server
     prosody:
-        image: jitsi/prosody:${JITSI_IMAGE_VERSION:-stable-10184}
+        image: jitsi/prosody:${JITSI_IMAGE_VERSION:-stable-10314}
         restart: ${RESTART_POLICY:-unless-stopped}
         expose:
             - '${XMPP_PORT:-5222}'
@@ -342,7 +340,7 @@ services:
 
     # Focus component
     jicofo:
-        image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-stable-10184}
+        image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-stable-10314}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '127.0.0.1:${JICOFO_REST_PORT:-8888}:8888'
@@ -389,9 +387,14 @@ services:
             - JICOFO_ENABLE_LOAD_REDISTRIBUTION
             - JICOFO_ENABLE_REST
             - JICOFO_HEALTH_CHECKS_USE_PRESENCE
+            - JICOFO_ICE_FAILURE_INTERVAL
+            - JICOFO_ICE_FAILURE_MIN_ENDPOINTS
+            - JICOFO_ICE_FAILURE_THRESHOLD
             - JICOFO_MAX_MEMORY
             - JICOFO_MULTI_STREAM_BACKWARD_COMPAT
             - JICOFO_OCTO_REGION
+            - JICOFO_RESTART_REQUEST_MAX
+            - JICOFO_RESTART_REQUEST_INTERVAL
             - JICOFO_TRUSTED_DOMAINS
             - JIBRI_BREWERY_MUC
             - JIBRI_REQUEST_RETRIES
@@ -434,7 +437,7 @@ services:
 
     # Video bridge
     jvb:
-        image: jitsi/jvb:${JITSI_IMAGE_VERSION:-stable-10184}
+        image: jitsi/jvb:${JITSI_IMAGE_VERSION:-stable-10314}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '${JVB_PORT:-10000}:${JVB_PORT:-10000}/udp'

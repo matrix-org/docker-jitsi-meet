@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
     transcriber:
-        image: jitsi/jigasi:${JITSI_IMAGE_VERSION:-stable-10184}
+        image: jitsi/jigasi:${JITSI_IMAGE_VERSION:-stable-10314}
         restart: ${RESTART_POLICY:-unless-stopped}
         volumes:
             - ${CONFIG}/transcriber:/config:Z
@@ -37,6 +37,7 @@ services:
             - JIGASI_XMPP_USER
             - JIGASI_XMPP_PASSWORD
             - JIGASI_BREWERY_MUC
+            - JIGASI_STATS_ID
             - JIGASI_TRANSCRIBER_ADVERTISE_URL
             - JIGASI_TRANSCRIBER_CUSTOM_SERVICE
             - JIGASI_TRANSCRIBER_CUSTOM_TRANSLATION_SERVICE
