@@ -174,24 +174,17 @@ VirtualHost "{{ $XMPP_DOMAIN }}"
     }
     modules_enabled = {
         "bosh";
+        "features_identity";
         {{ if $ENABLE_XMPP_WEBSOCKET }}
         "websocket";
         "smacks"; -- XEP-0198: Stream Management
         {{ end }}
-        "speakerstats";
         "conference_duration";
-        "room_metadata";
-        {{ if $ENABLE_END_CONFERENCE }}
-        "end_conference";
-        {{ end }}
         {{ if $ENABLE_LOBBY }}
         "muc_lobby_rooms";
         {{ end }}
         {{ if $ENABLE_BREAKOUT_ROOMS }}
         "muc_breakout_rooms";
-        {{ end }}
-        {{ if $ENABLE_AV_MODERATION }}
-        "av_moderation";
         {{ end }}
         {{ if .Env.XMPP_MODULES }}
         "{{ join "\";\n        \"" (splitList "," .Env.XMPP_MODULES | compact) }}";
@@ -212,7 +205,6 @@ VirtualHost "{{ $XMPP_DOMAIN }}"
     }
 
     main_muc = "{{ $XMPP_MUC_DOMAIN }}"
-    room_metadata_component = "metadata.{{ $XMPP_DOMAIN }}"
     {{ if $ENABLE_LOBBY }}
     lobby_muc = "lobby.{{ $XMPP_DOMAIN }}"
     {{ if or $ENABLE_RECORDING $ENABLE_TRANSCRIPTIONS }}
@@ -226,17 +218,6 @@ VirtualHost "{{ $XMPP_DOMAIN }}"
 
     {{ if $ENABLE_BREAKOUT_ROOMS }}
     breakout_rooms_muc = "breakout.{{ $XMPP_DOMAIN }}"
-    {{ end }}
-
-    speakerstats_component = "speakerstats.{{ $XMPP_DOMAIN }}"
-    conference_duration_component = "conferenceduration.{{ $XMPP_DOMAIN }}"
-
-    {{ if $ENABLE_END_CONFERENCE }}
-    end_conference_component = "endconference.{{ $XMPP_DOMAIN }}"
-    {{ end }}
-
-    {{ if $ENABLE_AV_MODERATION }}
-    av_moderation_component = "avmoderation.{{ $XMPP_DOMAIN }}"
     {{ end }}
 
     c2s_require_encryption = {{ $C2S_REQUIRE_ENCRYPTION }}
@@ -415,9 +396,6 @@ Component "speakerstats.{{ $XMPP_DOMAIN }}" "speakerstats_component"
         "{{ join "\";\n        \"" (splitList "," .Env.XMPP_SPEAKERSTATS_MODULES | compact) }}";
     }
     {{- end }}
-
-Component "conferenceduration.{{ $XMPP_DOMAIN }}" "conference_duration_component"
-    muc_component = "{{ $XMPP_MUC_DOMAIN }}"
 
 {{ if $ENABLE_END_CONFERENCE }}
 Component "endconference.{{ $XMPP_DOMAIN }}" "end_conference"
