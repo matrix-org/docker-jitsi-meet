@@ -1,7 +1,7 @@
 services:
     # Frontend
     web:
-        image: jitsi/web:${JITSI_IMAGE_VERSION:-unstable}
+        image: jitsi/web:${JITSI_IMAGE_VERSION:-stable-10741}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '${HTTP_PORT}:80'
@@ -32,6 +32,7 @@ services:
             - COLIBRI_WEBSOCKET_REGEX
             - CONFCODE_URL
             - CORS_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN
+            - CSP_HEADER
             - DEFAULT_LANGUAGE
             - DEPLOYMENTINFO_ENVIRONMENT
             - DEPLOYMENTINFO_ENVIRONMENT_TYPE
@@ -191,7 +192,7 @@ services:
 
     # XMPP server
     prosody:
-        image: jitsi/prosody:${JITSI_IMAGE_VERSION:-unstable}
+        image: jitsi/prosody:${JITSI_IMAGE_VERSION:-stable-10741}
         restart: ${RESTART_POLICY:-unless-stopped}
         expose:
             - '${XMPP_PORT:-5222}'
@@ -317,6 +318,7 @@ services:
             - VISITORS_XMPP_DOMAIN
             - VISITORS_XMPP_SERVER
             - VISITORS_XMPP_PORT
+            - WAIT_FOR_HOST_DISABLE_AUTO_OWNERS
             - XMPP_BREAKOUT_MUC_MODULES
             - XMPP_CONFIGURATION
             - XMPP_DOMAIN
@@ -341,7 +343,7 @@ services:
 
     # Focus component
     jicofo:
-        image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-unstable}
+        image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-stable-10741}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '127.0.0.1:${JICOFO_REST_PORT:-8888}:8888'
@@ -438,7 +440,7 @@ services:
 
     # Video bridge
     jvb:
-        image: jitsi/jvb:${JITSI_IMAGE_VERSION:-unstable}
+        image: jitsi/jvb:${JITSI_IMAGE_VERSION:-stable-10741}
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '${JVB_PORT:-10000}:${JVB_PORT:-10000}/udp'
