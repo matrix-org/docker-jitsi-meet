@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv bash
 
-if [[ ! -f /etc/saslauthd.conf ]] && [[ "$AUTH_TYPE" == "ldap" ]]; then
+if [[ ! -f "/etc/saslauthd.conf" ]] && [[ "$AUTH_TYPE" == "ldap" ]]; then
   tpl /defaults/saslauthd.conf > /etc/saslauthd.conf
   mkdir -pm777 /var/run/saslauthd
   adduser prosody sasl
@@ -65,7 +65,7 @@ fi
 tpl /defaults/prosody.cfg.lua > $PROSODY_CFG
 tpl /defaults/conf.d/$PROSODY_SITE_CFG > /config/conf.d/$PROSODY_SITE_CFG
 
-if [[ -z $JICOFO_AUTH_PASSWORD ]]; then
+if [[ -z "$JICOFO_AUTH_PASSWORD" ]]; then
     echo 'FATAL ERROR: Jicofo auth password must be set'
     exit 1
 fi
@@ -83,61 +83,29 @@ fi
 
 # User registration is now handled by the 70-register-setup service after prosody starts
 
-if [[ -z $JVB_AUTH_PASSWORD ]]; then
+if [[ -z "$JVB_AUTH_PASSWORD" ]]; then
     echo 'FATAL ERROR: JVB auth password must be set'
     exit 1
-fi
-
-OLD_JVB_AUTH_PASSWORD=passw0rd
-if [[ "$JVB_AUTH_PASSWORD" == "$OLD_JVB_AUTH_PASSWORD" ]]; then
-    echo 'FATAL ERROR: JVB auth password must be changed, check the README'
-    exit 1
-fi
-
-if [[ ! -z $JIBRI_XMPP_PASSWORD ]]; then
-    OLD_JIBRI_XMPP_PASSWORD=passw0rd
-    if [[ "$JIBRI_XMPP_PASSWORD" == "$OLD_JIBRI_XMPP_PASSWORD" ]]; then
-        echo 'FATAL ERROR: Jibri auth password must be changed, check the README'
-        exit 1
-    fi
-fi
-
-if [[ "$PROSODY_MODE" == "client" ]]; then
-    if [[ ! -z $JIBRI_RECORDER_PASSWORD ]]; then
-        OLD_JIBRI_RECORDER_PASSWORD=passw0rd
-        if [[ "$JIBRI_RECORDER_PASSWORD" == "$OLD_JIBRI_RECORDER_PASSWORD" ]]; then
-            echo 'FATAL ERROR: Jibri recorder password must be changed, check the README'
-            exit 1
-        fi
-    fi
-fi
-
-if [[ ! -z $JIGASI_XMPP_PASSWORD ]]; then
-    OLD_JIGASI_XMPP_PASSWORD=passw0rd
-    if [[ "$JIGASI_XMPP_PASSWORD" == "$OLD_JIGASI_XMPP_PASSWORD" ]]; then
-        echo 'FATAL ERROR: Jigasi auth password must be changed, check the README'
-        exit 1
-    fi
 fi
 
 if [[ "$PROSODY_MODE" == "visitors" ]]; then
     [ -z "$VISITORS_XMPP_DOMAIN" ] && VISITORS_XMPP_DOMAIN="meet.jitsi"
     [ -z "$PROSODY_VISITOR_INDEX" ] && PROSODY_VISITOR_INDEX=0
     FULL_VISITORS_XMPP_DOMAIN="v$PROSODY_VISITOR_INDEX.$VISITORS_XMPP_DOMAIN"
-    if [[ ! -f /config/certs/$FULL_VISITORS_XMPP_DOMAIN.crt ]]; then
+    if [[ ! -f "/config/certs/$FULL_VISITORS_XMPP_DOMAIN.crt" ]]; then
         # echo for using all default values
         echo | prosodyctl --config $PROSODY_CFG cert generate $FULL_VISITORS_XMPP_DOMAIN
     fi
 elif [[ "$PROSODY_MODE" == "brewery" ]]; then
     echo "No need to generate certs for main XMPP domain in brewery mode"
 else
-    if [[ ! -f /config/certs/$XMPP_DOMAIN.crt ]]; then
+    if [[ ! -f "/config/certs/$XMPP_DOMAIN.crt" ]]; then
         # echo for using all default values
         echo | prosodyctl --config $PROSODY_CFG cert generate $XMPP_DOMAIN
     fi
 fi
 
-if [[ ! -f /config/certs/$XMPP_AUTH_DOMAIN.crt ]]; then
+if [[ ! -f "/config/certs/$XMPP_AUTH_DOMAIN.crt" ]]; then
     # echo for using all default values
     echo | prosodyctl --config $PROSODY_CFG cert generate $XMPP_AUTH_DOMAIN
 fi
