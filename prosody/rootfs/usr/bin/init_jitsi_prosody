@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Configuring saslauthd"
-if [[ ! -f /etc/saslauthd.conf ]]; then
+if [[ ! -f "/etc/saslauthd.conf" ]] && [[ "$AUTH_TYPE" == "ldap" ]]; then
   tpl /defaults/saslauthd.conf > /etc/saslauthd.conf
   mkdir -pm777 /var/run/saslauthd
   adduser prosody sasl
@@ -68,7 +68,7 @@ tpl /defaults/prosody.cfg.lua > $PROSODY_CFG
 tpl /defaults/conf.d/$PROSODY_SITE_CFG > /config/conf.d/$PROSODY_SITE_CFG
 
 echo "Configuring Jicofo auth"
-if [[ -z $JICOFO_AUTH_PASSWORD ]]; then
+if [[ -z "$JICOFO_AUTH_PASSWORD" ]]; then
     echo 'FATAL ERROR: Jicofo auth password must be set'
     exit 1
 fi
@@ -92,7 +92,7 @@ if [[ "$PROSODY_MODE" == "client" ]]; then
 fi
 
 echo "Configuring JVB auth"
-if [[ -z $JVB_AUTH_PASSWORD ]]; then
+if [[ -z "$JVB_AUTH_PASSWORD" ]]; then
     echo 'FATAL ERROR: JVB auth password must be set'
     exit 1
 fi
@@ -154,21 +154,21 @@ if [[ "$PROSODY_MODE" == "visitors" ]]; then
     [ -z "$VISITORS_XMPP_DOMAIN" ] && VISITORS_XMPP_DOMAIN="meet.jitsi"
     [ -z "$PROSODY_VISITOR_INDEX" ] && PROSODY_VISITOR_INDEX=0
     FULL_VISITORS_XMPP_DOMAIN="v$PROSODY_VISITOR_INDEX.$VISITORS_XMPP_DOMAIN"
-    if [[ ! -f /config/certs/$FULL_VISITORS_XMPP_DOMAIN.crt ]]; then
+    if [[ ! -f "/config/certs/$FULL_VISITORS_XMPP_DOMAIN.crt" ]]; then
         # echo for using all default values
         echo | prosodyctl --config $PROSODY_CFG cert generate "$FULL_VISITORS_XMPP_DOMAIN"
     fi
 elif [[ "$PROSODY_MODE" == "brewery" ]]; then
     echo "No need to generate certs for main XMPP domain in brewery mode"
 else
-    if [[ ! -f /config/certs/$XMPP_DOMAIN.crt ]]; then
+    if [[ ! -f "/config/certs/$XMPP_DOMAIN.crt" ]]; then
         # echo for using all default values
         echo | prosodyctl --config $PROSODY_CFG cert generate "$XMPP_DOMAIN"
     fi
 fi
 
 echo "Checking if auth domain certificate exists"
-if [[ ! -f /config/certs/$XMPP_AUTH_DOMAIN.crt ]]; then
+if [[ ! -f "/config/certs/$XMPP_AUTH_DOMAIN.crt" ]]; then
     echo "Generating default certificate for auth domain $XMPP_AUTH_DOMAIN as it does not exist"
     # echo for using all default values
     echo | prosodyctl --config $PROSODY_CFG cert generate "$XMPP_AUTH_DOMAIN"
